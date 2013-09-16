@@ -1,0 +1,19 @@
+This is a working design and has been made by me but I offer no
+guarantee that it will work for you. You should consider the five
+legged design in preference to this as it is less prone to tipping and
+teh foot rest ring is much stronger.
+
+This stool is designed to be cut from 18mm plywood.
+
+It uses interference fit joints 17.5mm wide assuming a sheet material
+with uniform 17.7mm thickness. If your material is more than 0.1mm
+different to this the joints may not fit properly.
+
+It has been designed with a metric 6mm end mill in mind
+
+Layer 0 is the through sheet profile cut.
+
+The vcarve pro 7 .crv files are what I used to generate the gcode (tap
+files) and may or may not be useful to you. They contain the toolpaths
+with my name and makespace text in.
+

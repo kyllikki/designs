@@ -1,0 +1,17 @@
+This folding chair is designed to be cut from 24mm plywood though any
+timber with sufficient bending resitance should suffice.
+
+It has been designed with a metric 6mm end mill in mind
+
+The design is double sided and the layers represent different types of
+cut.
+
+Layer 0 is the through sheet profile cut the others are hinge rebates
+and decoration.
+
+The vcarve pro 7 .crv files are what I used to generate the gcode (tap
+files) and may or may not be useful to you.
+
+This is a working design and has been made by me but I offer no
+guarantee that it will work for you.
+
