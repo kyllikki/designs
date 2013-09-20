@@ -1437,9 +1437,9 @@ AcDbLayerTableRecord
   2
 rear hinge barrel 8mm
  70
-0
+1
  62
-5
+-5
 420
 255
   6
@@ -1993,15 +1993,15 @@ AcDbLine
   6
 BYLAYER
  10
-46.0000000000000284
+46.0000000000000426
  20
-620.0
+764.3999999999996362
  30
 0.0
  11
-46.0000000000000497
+46.0000000000000284
  21
-807.0
+623.0
  31
 0.0
   0
@@ -3939,9 +3939,9 @@ AcDbCircle
 100
 AcDbArc
  50
-100.515035710393164
+100.5106938128438117
  51
-181.2641456818011534
+180.0
   0
 ARC
   5
@@ -3971,7 +3971,7 @@ AcDbArc
  50
 0.0
  51
-79.7384403179017056
+79.7384455774419791
   0
 ARC
   5
@@ -3989,19 +3989,19 @@ BYLAYER
 100
 AcDbCircle
  10
-275.0000000000001137
+275.0026385001557969
  20
--57.8928571400417695
+-57.8690663827647995
  30
 0.0
  40
-1027.0
+1026.9761197545969935
 100
 AcDbArc
  50
-79.738440317901734
+79.7383487185016975
  51
-100.2892025746580629
+100.2891109752579979
   0
 ARC
   5
@@ -4235,7 +4235,7 @@ AcDbCircle
 100
 AcDbArc
  50
-81.8723314220701326
+81.8723314220701468
  51
 98.1276680526517282
   0
@@ -4489,36 +4489,6 @@ BYLAYER
 100
 AcDbCircle
  10
-326.0
- 20
-469.0
- 30
-0.0
- 40
-3.0
-100
-AcDbArc
- 50
-357.7478952296356738
- 51
-90.0
-  0
-ARC
-  5
-AB
-100
-AcDbEntity
-  8
-rear hinge barrel 8mm
- 62
-256
-370
--1
-  6
-BYLAYER
-100
-AcDbCircle
- 10
 224.0
  20
 467.0
@@ -4535,7 +4505,7 @@ AcDbArc
   0
 LINE
   5
-AC
+AB
 100
 AcDbEntity
 100
@@ -4563,7 +4533,7 @@ BYLAYER
   0
 ARC
   5
-AD
+AC
 100
 AcDbEntity
   8
@@ -4589,6 +4559,34 @@ AcDbArc
  50
 270.0
  51
+0.0
+  0
+LINE
+  5
+AD
+100
+AcDbEntity
+100
+AcDbLine
+  8
+rear hinge barrel 8mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+224.0
+ 20
+464.0
+ 30
+0.0
+ 11
+326.0
+ 21
+464.0
+ 31
 0.0
   0
 LINE
@@ -4607,15 +4605,15 @@ rear hinge barrel 8mm
   6
 BYLAYER
  10
-224.0
+329.0
  20
-464.0
+467.0
  30
 0.0
  11
-326.0
+329.0
  21
-464.0
+469.0
  31
 0.0
   0
@@ -4627,7 +4625,7 @@ AcDbEntity
 100
 AcDbLine
   8
-rear hinge barrel 8mm
+front hinge barrel 8mm
  62
 256
 370
@@ -4635,15 +4633,15 @@ rear hinge barrel 8mm
   6
 BYLAYER
  10
-329.0
+221.0
  20
-467.0
+465.0
  30
 0.0
  11
-329.0
+221.0
  21
-469.0
+467.0
  31
 0.0
   0
@@ -4663,34 +4661,6 @@ front hinge barrel 8mm
   6
 BYLAYER
  10
-221.0
- 20
-465.0
- 30
-0.0
- 11
-221.0
- 21
-467.0
- 31
-0.0
-  0
-LINE
-  5
-B1
-100
-AcDbEntity
-100
-AcDbLine
-  8
-front hinge barrel 8mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
 224.0
  20
 470.0
@@ -4705,7 +4675,7 @@ BYLAYER
   0
 ARC
   5
-B2
+B1
 100
 AcDbEntity
   8
@@ -4735,7 +4705,7 @@ AcDbArc
   0
 LINE
   5
-B3
+B2
 100
 AcDbEntity
 100
@@ -4763,7 +4733,7 @@ BYLAYER
   0
 LINE
   5
-B4
+B3
 100
 AcDbEntity
 100
@@ -4788,6 +4758,36 @@ BYLAYER
 467.0
  31
 0.0
+  0
+ARC
+  5
+B4
+100
+AcDbEntity
+  8
+front hinge barrel 8mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+224.0
+ 20
+467.0
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+90.0
+ 51
+180.0
   0
 ARC
   5
@@ -4807,66 +4807,6 @@ AcDbCircle
  10
 224.0
  20
-467.0
- 30
-0.0
- 40
-3.0
-100
-AcDbArc
- 50
-90.0
- 51
-180.0
-  0
-ARC
-  5
-B6
-100
-AcDbEntity
-  8
-front hinge barrel 8mm
- 62
-256
-370
--1
-  6
-BYLAYER
-100
-AcDbCircle
- 10
-326.0
- 20
-467.0
- 30
-0.0
- 40
-3.0
-100
-AcDbArc
- 50
-357.7478952296356738
- 51
-90.0
-  0
-ARC
-  5
-B7
-100
-AcDbEntity
-  8
-front hinge barrel 8mm
- 62
-256
-370
--1
-  6
-BYLAYER
-100
-AcDbCircle
- 10
-224.0
- 20
 465.0
  30
 0.0
@@ -4881,7 +4821,7 @@ AcDbArc
   0
 LINE
   5
-B8
+B6
 100
 AcDbEntity
 100
@@ -4909,7 +4849,7 @@ BYLAYER
   0
 LINE
   5
-B9
+B7
 100
 AcDbEntity
 100
@@ -4937,7 +4877,7 @@ BYLAYER
   0
 ARC
   5
-BA
+B8
 100
 AcDbEntity
   8
@@ -4967,7 +4907,7 @@ AcDbArc
   0
 ARC
   5
-BB
+B9
 100
 AcDbEntity
   8
@@ -4997,7 +4937,7 @@ AcDbArc
   0
 ARC
   5
-BC
+BA
 100
 AcDbEntity
   8
@@ -5027,7 +4967,7 @@ AcDbArc
   0
 ARC
   5
-BD
+BB
 100
 AcDbEntity
   8
@@ -5057,7 +4997,7 @@ AcDbArc
   0
 ARC
   5
-BE
+BC
 100
 AcDbEntity
   8
@@ -5087,7 +5027,7 @@ AcDbArc
   0
 ARC
   5
-BF
+BD
 100
 AcDbEntity
   8
@@ -5117,7 +5057,7 @@ AcDbArc
   0
 ARC
   5
-C0
+BE
 100
 AcDbEntity
   8
@@ -5147,7 +5087,7 @@ AcDbArc
   0
 ARC
   5
-C1
+BF
 100
 AcDbEntity
   8
@@ -5177,7 +5117,7 @@ AcDbArc
   0
 LINE
   5
-C2
+C0
 100
 AcDbEntity
 100
@@ -5205,7 +5145,7 @@ BYLAYER
   0
 LINE
   5
-C3
+C1
 100
 AcDbEntity
 100
@@ -5226,6 +5166,62 @@ BYLAYER
 0.0
  11
 104.0000000000000284
+ 21
+662.0
+ 31
+0.0
+  0
+LINE
+  5
+C2
+100
+AcDbEntity
+100
+AcDbLine
+  8
+rear seat sockets 17mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+107.0000000000000284
+ 20
+635.0
+ 30
+0.0
+ 11
+115.0000000000000284
+ 21
+635.0
+ 31
+0.0
+  0
+LINE
+  5
+C3
+100
+AcDbEntity
+100
+AcDbLine
+  8
+rear seat sockets 17mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+118.0000000000000426
+ 20
+638.0
+ 30
+0.0
+ 11
+118.0000000000000426
  21
 662.0
  31
@@ -5247,15 +5243,15 @@ rear seat sockets 17mm
   6
 BYLAYER
  10
-107.0000000000000284
+435.0
  20
-635.0
+665.0
  30
 0.0
  11
-115.0000000000000284
+443.0
  21
-635.0
+665.0
  31
 0.0
   0
@@ -5275,13 +5271,13 @@ rear seat sockets 17mm
   6
 BYLAYER
  10
-118.0000000000000426
+432.0
  20
 638.0
  30
 0.0
  11
-118.0000000000000426
+432.0
  21
 662.0
  31
@@ -5305,62 +5301,6 @@ BYLAYER
  10
 435.0
  20
-665.0
- 30
-0.0
- 11
-443.0
- 21
-665.0
- 31
-0.0
-  0
-LINE
-  5
-C7
-100
-AcDbEntity
-100
-AcDbLine
-  8
-rear seat sockets 17mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-432.0
- 20
-638.0
- 30
-0.0
- 11
-432.0
- 21
-662.0
- 31
-0.0
-  0
-LINE
-  5
-C8
-100
-AcDbEntity
-100
-AcDbLine
-  8
-rear seat sockets 17mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-435.0
- 20
 635.0
  30
 0.0
@@ -5373,7 +5313,7 @@ BYLAYER
   0
 LINE
   5
-C9
+C7
 100
 AcDbEntity
 100
@@ -5401,7 +5341,7 @@ BYLAYER
   0
 ARC
   5
-CA
+C8
 100
 AcDbEntity
   8
@@ -5431,7 +5371,7 @@ AcDbArc
   0
 ARC
   5
-CB
+C9
 100
 AcDbEntity
   8
@@ -5461,7 +5401,7 @@ AcDbArc
   0
 ARC
   5
-CC
+CA
 100
 AcDbEntity
   8
@@ -5491,7 +5431,7 @@ AcDbArc
   0
 ARC
   5
-CD
+CB
 100
 AcDbEntity
   8
@@ -5521,7 +5461,7 @@ AcDbArc
   0
 LINE
   5
-CE
+CC
 100
 AcDbEntity
 100
@@ -5549,7 +5489,7 @@ BYLAYER
   0
 LINE
   5
-CF
+CD
 100
 AcDbEntity
 100
@@ -5577,7 +5517,7 @@ BYLAYER
   0
 LINE
   5
-D0
+CE
 100
 AcDbEntity
 100
@@ -5605,7 +5545,7 @@ BYLAYER
   0
 LINE
   5
-D1
+CF
 100
 AcDbEntity
 100
@@ -5633,7 +5573,7 @@ BYLAYER
   0
 ARC
   5
-D2
+D0
 100
 AcDbEntity
   8
@@ -5660,6 +5600,66 @@ AcDbArc
 90.0
  51
 180.0
+  0
+ARC
+  5
+D1
+100
+AcDbEntity
+  8
+rear hinge barrel 8mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+503.5
+ 20
+812.0
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+0.0
+ 51
+90.0
+  0
+ARC
+  5
+D2
+100
+AcDbEntity
+  8
+rear hinge barrel 8mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+464.5
+ 20
+808.0
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+180.0
+ 51
+270.0
   0
 ARC
   5
@@ -5679,66 +5679,6 @@ AcDbCircle
  10
 503.5
  20
-812.0
- 30
-0.0
- 40
-3.0
-100
-AcDbArc
- 50
-0.0
- 51
-90.0
-  0
-ARC
-  5
-D4
-100
-AcDbEntity
-  8
-rear hinge barrel 8mm
- 62
-256
-370
--1
-  6
-BYLAYER
-100
-AcDbCircle
- 10
-464.5
- 20
-808.0
- 30
-0.0
- 40
-3.0
-100
-AcDbArc
- 50
-180.0
- 51
-270.0
-  0
-ARC
-  5
-D5
-100
-AcDbEntity
-  8
-rear hinge barrel 8mm
- 62
-256
-370
--1
-  6
-BYLAYER
-100
-AcDbCircle
- 10
-503.5
- 20
 808.0
  30
 0.0
@@ -5753,7 +5693,7 @@ AcDbArc
   0
 LINE
   5
-D6
+D4
 100
 AcDbEntity
 100
@@ -5776,6 +5716,62 @@ BYLAYER
 506.5
  21
 812.0
+ 31
+0.0
+  0
+LINE
+  5
+D5
+100
+AcDbEntity
+100
+AcDbLine
+  8
+rear hinge barrel 8mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+464.5
+ 20
+805.0
+ 30
+0.0
+ 11
+503.5
+ 21
+805.0
+ 31
+0.0
+  0
+LINE
+  5
+D6
+100
+AcDbEntity
+100
+AcDbLine
+  8
+rear hinge barrel 8mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+461.5
+ 20
+812.0
+ 30
+0.0
+ 11
+461.5
+ 21
+808.0
  31
 0.0
   0
@@ -5795,77 +5791,21 @@ rear hinge barrel 8mm
   6
 BYLAYER
  10
-464.5
+503.5
  20
-805.0
+815.0
  30
 0.0
  11
-503.5
+464.5
  21
-805.0
+815.0
  31
 0.0
   0
 LINE
   5
 D8
-100
-AcDbEntity
-100
-AcDbLine
-  8
-rear hinge barrel 8mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-461.5
- 20
-812.0
- 30
-0.0
- 11
-461.5
- 21
-808.0
- 31
-0.0
-  0
-LINE
-  5
-D9
-100
-AcDbEntity
-100
-AcDbLine
-  8
-rear hinge barrel 8mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-503.5
- 20
-815.0
- 30
-0.0
- 11
-464.5
- 21
-815.0
- 31
-0.0
-  0
-LINE
-  5
-DA
 100
 AcDbEntity
 100
@@ -5893,7 +5833,7 @@ BYLAYER
   0
 LINE
   5
-DB
+D9
 100
 AcDbEntity
 100
@@ -5921,7 +5861,7 @@ BYLAYER
   0
 LINE
   5
-DC
+DA
 100
 AcDbEntity
 100
@@ -5949,7 +5889,7 @@ BYLAYER
   0
 LINE
   5
-DD
+DB
 100
 AcDbEntity
 100
@@ -5977,91 +5917,63 @@ BYLAYER
   0
 LINE
   5
+DC
+100
+AcDbEntity
+100
+AcDbLine
+  8
+0
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+464.0000000000000568
+ 20
+813.0
+ 30
+0.0
+ 11
+464.0000000000000568
+ 21
+849.7032676644600997
+ 31
+0.0
+  0
+LINE
+  5
+DD
+100
+AcDbEntity
+100
+AcDbLine
+  8
+0
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+86.0000000000000426
+ 20
+813.0
+ 30
+0.0
+ 11
+86.0000000000000426
+ 21
+849.7032676644600997
+ 31
+0.0
+  0
+LINE
+  5
 DE
-100
-AcDbEntity
-100
-AcDbLine
-  8
-rear hinge plate 2mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-503.5
- 20
-855.5999999999999091
- 30
-0.0
- 11
-464.0
- 21
-855.5999999999999091
- 31
-0.0
-  0
-LINE
-  5
-DF
-100
-AcDbEntity
-100
-AcDbLine
-  8
-0
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-464.0000000000000568
- 20
-813.0
- 30
-0.0
- 11
-464.0000000000000568
- 21
-849.7032676644600997
- 31
-0.0
-  0
-LINE
-  5
-E0
-100
-AcDbEntity
-100
-AcDbLine
-  8
-0
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-86.0000000000000426
- 20
-813.0
- 30
-0.0
- 11
-86.0000000000000426
- 21
-849.7032676644600997
- 31
-0.0
-  0
-LINE
-  5
-E1
 100
 AcDbEntity
 100
@@ -6089,7 +6001,7 @@ BYLAYER
   0
 ARC
   5
-E2
+DF
 100
 AcDbEntity
   8
@@ -6119,7 +6031,7 @@ AcDbArc
   0
 ARC
   5
-E3
+E0
 100
 AcDbEntity
   8
@@ -6149,7 +6061,7 @@ AcDbArc
   0
 LINE
   5
-E4
+E1
 100
 AcDbEntity
 100
@@ -6177,7 +6089,7 @@ BYLAYER
   0
 ARC
   5
-E5
+E2
 100
 AcDbEntity
   8
@@ -6207,7 +6119,7 @@ AcDbArc
   0
 ARC
   5
-E6
+E3
 100
 AcDbEntity
   8
@@ -6237,7 +6149,7 @@ AcDbArc
   0
 LINE
   5
-E7
+E4
 100
 AcDbEntity
 100
@@ -6265,9 +6177,99 @@ BYLAYER
   0
 ARC
   5
+E5
+100
+AcDbEntity
+  8
+rear hinge plate 2mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+49.5000000000000426
+ 20
+815.0000000000001137
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+180.0
+ 51
+0.0
+  0
+LINE
+  5
+E6
+100
+AcDbEntity
+100
+AcDbLine
+  8
+rear hinge plate 2mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+52.5000000000000426
+ 20
+815.0000000000001137
+ 30
+0.0
+ 11
+86.0
+ 21
+815.0000000000001137
+ 31
+0.0
+  0
+ARC
+  5
+E7
+100
+AcDbEntity
+  8
+rear hinge plate 2mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+49.5000000000000426
+ 20
+855.6000000000000227
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+0.0
+ 51
+180.0
+  0
+LINE
+  5
 E8
 100
 AcDbEntity
+100
+AcDbLine
   8
 rear hinge plate 2mm
  62
@@ -6276,112 +6278,22 @@ rear hinge plate 2mm
 -1
   6
 BYLAYER
-100
-AcDbCircle
  10
-49.5000000000000426
+86.0
  20
-815.0000000000001137
+855.6000000000000227
  30
 0.0
- 40
-3.0
-100
-AcDbArc
- 50
-180.0
- 51
+ 11
+52.5000000000000426
+ 21
+855.6000000000000227
+ 31
 0.0
   0
-LINE
+ARC
   5
 E9
-100
-AcDbEntity
-100
-AcDbLine
-  8
-rear hinge plate 2mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-52.5000000000000426
- 20
-815.0000000000001137
- 30
-0.0
- 11
-86.0
- 21
-815.0000000000001137
- 31
-0.0
-  0
-ARC
-  5
-EA
-100
-AcDbEntity
-  8
-rear hinge plate 2mm
- 62
-256
-370
--1
-  6
-BYLAYER
-100
-AcDbCircle
- 10
-49.5000000000000426
- 20
-855.6000000000000227
- 30
-0.0
- 40
-3.0
-100
-AcDbArc
- 50
-0.0
- 51
-180.0
-  0
-LINE
-  5
-EB
-100
-AcDbEntity
-100
-AcDbLine
-  8
-rear hinge plate 2mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-86.0
- 20
-855.6000000000000227
- 30
-0.0
- 11
-52.5000000000000426
- 21
-855.6000000000000227
- 31
-0.0
-  0
-ARC
-  5
-EC
 100
 AcDbEntity
   8
@@ -6411,7 +6323,7 @@ AcDbArc
   0
 ARC
   5
-ED
+EA
 100
 AcDbEntity
   8
@@ -6441,7 +6353,7 @@ AcDbArc
   0
 LINE
   5
-EE
+EB
 100
 AcDbEntity
 100
@@ -6469,7 +6381,7 @@ BYLAYER
   0
 ARC
   5
-EF
+EC
 100
 AcDbEntity
   8
@@ -6499,7 +6411,7 @@ AcDbArc
   0
 ARC
   5
-F0
+ED
 100
 AcDbEntity
   8
@@ -6529,7 +6441,7 @@ AcDbArc
   0
 ARC
   5
-F1
+EE
 100
 AcDbEntity
   8
@@ -6559,7 +6471,7 @@ AcDbArc
   0
 ARC
   5
-F2
+EF
 100
 AcDbEntity
   8
@@ -6589,7 +6501,7 @@ AcDbArc
   0
 ARC
   5
-F3
+F0
 100
 AcDbEntity
   8
@@ -6619,7 +6531,7 @@ AcDbArc
   0
 ARC
   5
-F4
+F1
 100
 AcDbEntity
   8
@@ -6649,7 +6561,7 @@ AcDbArc
   0
 ARC
   5
-F5
+F2
 100
 AcDbEntity
   8
@@ -6679,7 +6591,7 @@ AcDbArc
   0
 ARC
   5
-F6
+F3
 100
 AcDbEntity
   8
@@ -6709,7 +6621,7 @@ AcDbArc
   0
 LINE
   5
-F7
+F4
 100
 AcDbEntity
 100
@@ -6737,7 +6649,7 @@ BYLAYER
   0
 LINE
   5
-F8
+F5
 100
 AcDbEntity
 100
@@ -6765,7 +6677,7 @@ BYLAYER
   0
 LINE
   5
-F9
+F6
 100
 AcDbEntity
 100
@@ -6793,7 +6705,7 @@ BYLAYER
   0
 LINE
   5
-FA
+F7
 100
 AcDbEntity
 100
@@ -6821,7 +6733,7 @@ BYLAYER
   0
 LINE
   5
-FB
+F8
 100
 AcDbEntity
 100
@@ -6849,7 +6761,7 @@ BYLAYER
   0
 ARC
   5
-FC
+F9
 100
 AcDbEntity
   8
@@ -6879,7 +6791,7 @@ AcDbArc
   0
 ARC
   5
-FD
+FA
 100
 AcDbEntity
   8
@@ -6896,6 +6808,96 @@ AcDbCircle
 227.0
  20
 472.0
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+180.0
+ 51
+0.0
+  0
+ARC
+  5
+FB
+100
+AcDbEntity
+  8
+front hinge plate 3mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+227.0
+ 20
+462.0
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+0.0
+ 51
+180.0
+  0
+ARC
+  5
+FC
+100
+AcDbEntity
+  8
+front hinge plate 3mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+227.0
+ 20
+431.0
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+180.0
+ 51
+0.0
+  0
+ARC
+  5
+FD
+100
+AcDbEntity
+  8
+front hinge plate 3mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+323.0
+ 20
+431.0
  30
 0.0
  40
@@ -6923,7 +6925,7 @@ BYLAYER
 100
 AcDbCircle
  10
-227.0
+323.0
  20
 462.0
  30
@@ -6943,96 +6945,6 @@ FF
 100
 AcDbEntity
   8
-front hinge plate 3mm
- 62
-256
-370
--1
-  6
-BYLAYER
-100
-AcDbCircle
- 10
-227.0
- 20
-431.0
- 30
-0.0
- 40
-3.0
-100
-AcDbArc
- 50
-180.0
- 51
-0.0
-  0
-ARC
-  5
-100
-100
-AcDbEntity
-  8
-front hinge plate 3mm
- 62
-256
-370
--1
-  6
-BYLAYER
-100
-AcDbCircle
- 10
-323.0
- 20
-431.0
- 30
-0.0
- 40
-3.0
-100
-AcDbArc
- 50
-180.0
- 51
-0.0
-  0
-ARC
-  5
-101
-100
-AcDbEntity
-  8
-front hinge plate 3mm
- 62
-256
-370
--1
-  6
-BYLAYER
-100
-AcDbCircle
- 10
-323.0
- 20
-462.0
- 30
-0.0
- 40
-3.0
-100
-AcDbArc
- 50
-0.0
- 51
-180.0
-  0
-ARC
-  5
-102
-100
-AcDbEntity
-  8
 rear hinge plate 3mm
  62
 256
@@ -7059,7 +6971,7 @@ AcDbArc
   0
 ARC
   5
-103
+100
 100
 AcDbEntity
   8
@@ -7086,6 +6998,90 @@ AcDbArc
 0.0
  51
 180.0
+  0
+LINE
+  5
+101
+100
+AcDbEntity
+100
+AcDbLine
+  8
+rear hinge plate 3mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+320.0
+ 20
+503.0
+ 30
+0.0
+ 11
+230.0
+ 21
+503.0
+ 31
+0.0
+  0
+LINE
+  5
+102
+100
+AcDbEntity
+100
+AcDbLine
+  8
+front hinge plate 3mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+230.0
+ 20
+431.0
+ 30
+0.0
+ 11
+320.0
+ 21
+431.0
+ 31
+0.0
+  0
+LINE
+  5
+103
+100
+AcDbEntity
+100
+AcDbLine
+  8
+front hinge plate 3mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+230.0
+ 20
+462.0
+ 30
+0.0
+ 11
+320.0
+ 21
+462.0
+ 31
+0.0
   0
 LINE
   5
@@ -7103,105 +7099,21 @@ rear hinge plate 3mm
   6
 BYLAYER
  10
-320.0
+230.0
  20
-503.0
+472.0
  30
 0.0
  11
-230.0
+320.0
  21
-503.0
+472.0
  31
 0.0
   0
 LINE
   5
 105
-100
-AcDbEntity
-100
-AcDbLine
-  8
-front hinge plate 3mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-230.0
- 20
-431.0
- 30
-0.0
- 11
-320.0
- 21
-431.0
- 31
-0.0
-  0
-LINE
-  5
-106
-100
-AcDbEntity
-100
-AcDbLine
-  8
-front hinge plate 3mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-230.0
- 20
-462.0
- 30
-0.0
- 11
-320.0
- 21
-462.0
- 31
-0.0
-  0
-LINE
-  5
-107
-100
-AcDbEntity
-100
-AcDbLine
-  8
-rear hinge plate 3mm
- 62
-256
-370
--1
-  6
-BYLAYER
- 10
-230.0
- 20
-472.0
- 30
-0.0
- 11
-320.0
- 21
-472.0
- 31
-0.0
-  0
-LINE
-  5
-108
 100
 AcDbEntity
 100
@@ -7229,7 +7141,7 @@ BYLAYER
   0
 LINE
   5
-109
+106
 100
 AcDbEntity
 100
@@ -7257,7 +7169,7 @@ BYLAYER
   0
 ARC
   5
-10A
+107
 100
 AcDbEntity
   8
@@ -7287,7 +7199,7 @@ AcDbArc
   0
 ARC
   5
-10B
+108
 100
 AcDbEntity
   8
@@ -7317,7 +7229,7 @@ AcDbArc
   0
 ARC
   5
-10C
+109
 100
 AcDbEntity
   8
@@ -7347,7 +7259,7 @@ AcDbArc
   0
 ARC
   5
-10D
+10A
 100
 AcDbEntity
   8
@@ -7377,7 +7289,7 @@ AcDbArc
   0
 ARC
   5
-10E
+10B
 100
 AcDbEntity
   8
@@ -7407,7 +7319,7 @@ AcDbArc
   0
 ARC
   5
-10F
+10C
 100
 AcDbEntity
   8
@@ -7437,7 +7349,7 @@ AcDbArc
   0
 LINE
   5
-110
+10D
 100
 AcDbEntity
 100
@@ -7465,7 +7377,7 @@ BYLAYER
   0
 ARC
   5
-111
+10E
 100
 AcDbEntity
   8
@@ -7495,7 +7407,7 @@ AcDbArc
   0
 ARC
   5
-112
+10F
 100
 AcDbEntity
   8
@@ -7525,7 +7437,7 @@ AcDbArc
   0
 ARC
   5
-113
+110
 100
 AcDbEntity
   8
@@ -7555,7 +7467,7 @@ AcDbArc
   0
 ARC
   5
-114
+111
 100
 AcDbEntity
   8
@@ -7585,7 +7497,7 @@ AcDbArc
   0
 LINE
   5
-115
+112
 100
 AcDbEntity
 100
@@ -7613,7 +7525,7 @@ BYLAYER
   0
 LINE
   5
-116
+113
 100
 AcDbEntity
 100
@@ -7641,7 +7553,7 @@ BYLAYER
   0
 LINE
   5
-117
+114
 100
 AcDbEntity
 100
@@ -7669,7 +7581,7 @@ BYLAYER
   0
 LINE
   5
-118
+115
 100
 AcDbEntity
 100
@@ -7697,7 +7609,7 @@ BYLAYER
   0
 ARC
   5
-119
+116
 100
 AcDbEntity
   8
@@ -7727,7 +7639,7 @@ AcDbArc
   0
 ARC
   5
-11A
+117
 100
 AcDbEntity
   8
@@ -7757,7 +7669,7 @@ AcDbArc
   0
 TEXT
   5
-11B
+118
 100
 AcDbEntity
 100
@@ -7801,7 +7713,7 @@ textstyle0
   0
 TEXT
   5
-11C
+119
 100
 AcDbEntity
 100
@@ -7842,6 +7754,94 @@ textstyle1
 0.0
  73
 3
+  0
+ARC
+  5
+11A
+100
+AcDbEntity
+  8
+rear hinge barrel 8mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+326.0
+ 20
+469.0
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+0.0
+ 51
+90.0
+  0
+ARC
+  5
+11B
+100
+AcDbEntity
+  8
+front hinge barrel 8mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+100
+AcDbCircle
+ 10
+326.0
+ 20
+467.0
+ 30
+0.0
+ 40
+3.0
+100
+AcDbArc
+ 50
+0.0
+ 51
+90.0
+  0
+LINE
+  5
+11C
+100
+AcDbEntity
+100
+AcDbLine
+  8
+rear hinge plate 2mm
+ 62
+256
+370
+-1
+  6
+BYLAYER
+ 10
+497.5
+ 20
+855.5999999999999091
+ 30
+0.0
+ 11
+464.0
+ 21
+855.5999999999999091
+ 31
+0.0
   0
 ENDSEC
   0
