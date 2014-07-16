@@ -1,0 +1,27 @@
+Parallella clip case
+====================
+
+This case is designed to be laser cut from 3mm acrylic.
+
+The tolerances are very close but the design has been successfully
+realised, though even the protective plastic covering upsets the slot
+sizes enough to cause issues.
+
+Using 1/8th inch acrylic does not work with this design!
+
+I used 10mm long M2.5 nylon bolts to hold the board to the base with
+nylon washers underneath the board as spacers.
+
+Layer 0 (black) is the through sheet profile cut.
+
+Layer 1 (red) is the connector and slot cutouts
+
+Layer 2 (yellow) is the text
+
+The lasercut files are what I used to create my prototypes and may or
+may not be useful to you. They contain the toolpaths with my name and
+the licence text in.
+
+This is a working design and has been made by me but I offer no
+guarantee that it will work for you.
+
