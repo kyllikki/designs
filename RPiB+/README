@@ -25,9 +25,6 @@ the licence text in.
 There are a couple of small issues with the design:
 
  - The µSD card slot is very fiddly to access
- - The box length is 0.5 mm too long
- - The usb ports cutout baseline is 0.5mm too low
- - The box height is overly generous and should be reduced by 4mm
 
 This is a working design and has been made by me but I offer no
 guarantee that it will work for you.
