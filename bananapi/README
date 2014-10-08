@@ -1,13 +1,14 @@
 Banana Pi clip case
 ===================
 
-This case is designed to be laser cut from 3mm acrylic.
+These cases are designed to be laser cut from 3mm or 1/8inch acrylic.
 
 The tolerances are very close but the design has been successfully
 realised, though even the protective plastic covering upsets the slot
 sizes enough to cause issues.
 
-Using 1/8th inch acrylic does not work with this design!
+The imperial file has the clearences for 1/8th inch the metric version
+will not fit.
 
 I used 10mm long M3 nylon bolts to hold the board to the base with
 nylon washers underneath the board as spacers.
