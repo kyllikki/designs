@@ -1,0 +1,43 @@
+Orange Pi PC H3 CPU heatsink
+============================
+
+Each heatsink is roughly 50g finished weight and has over 2200 square
+millimetres of surface area to dissipate heat over.
+
+See the image for the results.
+
+Method
+------
+
+This design was realised with a lathe, mill and bandsaw
+
+The operations were:
+
+ - 150mm length of 25mm round bar copper stock in three jaw chuck on lathe
+
+ - end face and make hole for lathe centre.
+
+ - rod turned round and turned down to 20mm for 20mm of length to fit
+   20mm collet on mills rotary table chuck
+
+ - on mill rod mounted between rotary table chuck and a centre.
+
+ - centre slitting saw height at the centre of the copper rod
+
+ - using a 1mm slitting saw cut 4mm deep grooves (ideally 6mm but in
+   my case the centre and rotary table would foul cuts deeper than 4mm)
+
+ - rotate table 40 degrees and repeat until all nine slots cut.
+
+ - use bandsaw to slice off 13mm lengths, parting soft material like
+   copper on a lathe really does not work (why yes i do need to buy a
+   new insert for my parting tool) take it slow and let it cool down
+   between cuts or it becomes very difficult to handle and may jam.
+
+ - put the sections back in the lathe and face both sides. I also
+   bevelled the bottom edges which removes some sharp edges.
+ 
+ - clean thoroughly and ensure no copper swarf remains to get on your
+   delicate electronics.
+
+ - use some thermal tape and attach to CPU
