@@ -1,0 +1,47 @@
+96Boards Consumer Enclosure
+===========================
+
+This enclosure is designed to be laser cut from 3mm acrylic. The case
+is for a 96boards "consumer" board format. It can accommodate either A
+or B depth boards although has only been tested with a HiKey type A.
+
+There are three layers within the design:
+
+ - The bottom layer has holes for fastening a standard 3.5 inch SATA
+   hard drive.
+
+ - The next layer has mounting holes for an "Amazon basics" USB 2 hub
+   circuit board.
+
+ - The top layer has mounting provision for the 96board and cutouts
+   for a USB Ethernet adaptor and USB serial adaptor.
+
+The USB Ethernet and serial adaptors I used were ordered from eBay so
+almost certainly what you get will need different mountings.
+
+This design has a top that can be easily flipped open to get access.
+
+The tolerances are very close but the design has been successfully
+realised, though even the protective plastic covering upsets the slot
+sizes enough to cause issues.
+
+Using 1/8th inch acrylic does not work with this design!
+
+I used nylon bolts to hold the boards to the base with
+five 0.5mm nylon washers underneath the board as spacers.
+
+Layer 0 (black) is the through sheet profile cut.
+
+Layer 1 (red) is the connector and slot cutouts
+
+Layer 2 (yellow) is the text
+
+The lasercut files are what I used to create my prototypes and may or
+may not be useful to you. They contain the toolpaths with my name and
+the licence text in.
+
+There is a a small issues with the design in that the µSD card slot is
+very fiddly to access and you need fingernails to extract a card.
+
+This is a working design and has been made by me but I offer no
+guarantee that it will work for you.
