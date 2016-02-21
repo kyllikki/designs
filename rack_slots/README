@@ -1,0 +1,36 @@
+19inch rack enclosure for slimlibe SBC cases
+============================================
+
+This enclosure is designed to be laser cut from 3mm acrylic. The
+enclosure is a 1U high 19inch rack unit in which five of my slimline
+single board computer cases can be placed. Such cases are currently
+available for the Orange Pi PC and the Raspberry Pi B+
+
+The overall design is one of a box girder which provides suprising
+structural rigidity, certianly when fully loaded there is no excessive
+flex in use.
+
+The parts are bolted together with 
+
+ - 20 x 10mm long M3 bolts for main structure 
+ - 8 x 12mm long M3 bolts for the front panel.
+ - 8 x 3mm washers for front panel locks
+ - 28 x M3 nuts
+
+The tolerances are very close but the design has been successfully
+realised, though even the protective plastic covering upsets the slot
+sizes enough to cause issues.
+
+Using 1/8th inch acrylic does not work with this design!
+
+ - Layer 0 (black) is the through sheet profile cut.
+ - Layer 1 (red) is the connector and slot cutouts
+ - Layer 2 (blue) is teh inner connector cut and should be first
+ - Layer 3 (green) is the text
+
+The lasercut files are what I used to create my prototypes and may or
+may not be useful to you. They contain the toolpaths with my name and
+the licence text in.
+
+This is a working design and has been made by me but I offer no
+guarantee that it will work for you.
