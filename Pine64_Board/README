@@ -1,0 +1,13 @@
+Pine64 Board dimensions
+=======================
+
+The Pine64 project has not released a full set of dimensions for their
+board (as of April 2016). I have carefully measured my board and
+produced these drawings and CAD models.
+
+These drawings and models are based on a single board and subject to
+my measuring tolerances so must not be used as a reference without
+checking.
+
+I am releasing these files in the hope someone else will find them
+useful but cannot be responsible for any errors.
