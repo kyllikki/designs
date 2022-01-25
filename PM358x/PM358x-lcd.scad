@@ -1,4 +1,9 @@
-// PM8535 LCD screen mount
+// PM8535 CRT to LCD screen adaptor
+//
+//
+// an adaptor allowing the use of an LCD screen (default size is for 8 inch HE080IA-01E) in place
+//   of the CRT in a Philips PM8535 Logic analyser. 
+
 echo(version=version());
 
 /* [Parts and display] */
@@ -15,9 +20,9 @@ apature_w = 180;
 // apature height
 apature_h = 137;
 // apature depth
-apature_d = 22;
+apature_d = 25;
 // amount overlaped behind apature
-apature_o = 8;
+apature_o = 9;
 
 /* [Mounting points] */
 // mounting width
@@ -34,13 +39,13 @@ mount_tab_d = 10;
 
 /* [LCD screen] */
 // screen width
-screen_w=173;
+screen_w=174;
 // screen height
 screen_h=136;
 // screen depth
 screen_d=3;
 // additional space between screen and mount
-screen_e=1; 
+screen_e=0.6; 
 
 /* [mount face] */
 // amount the screen is overlapped by a border
@@ -62,6 +67,8 @@ standoff_r = ((apature_w + apature_o2) - (screen_w + screen_e2)) / 4;
 // fixing bolts location
 bolt_x = ((apature_w + apature_o2) / 2) - standoff_r;
 bolt_y = ((apature_h + apature_o2) / 2) - standoff_r;
+// fixing bolt length
+bolt_l = 30;
 
 facia_d = 10; //facia depth
 facia_o2 = 20*2; // facia overlap
@@ -80,55 +87,67 @@ module m3_hex_bolt(height) {
 }
 
 
-module bolt_pattern(x,y) {
-    translate([ x,  y,    0]) m3_hex_bolt(25);
-    translate([ x, -y,    0]) m3_hex_bolt(25);
-    translate([ 0,  y, -2.1]) m3_hex_bolt(25);
-    translate([ 0, -y, -2.1]) m3_hex_bolt(25);
-    translate([-x,  y,    0]) m3_hex_bolt(25);
-    translate([-x, -y,    0]) m3_hex_bolt(25);    
+module bolt_pattern(x,y, l) {
+    translate([ x,  y,    0]) m3_hex_bolt(l);
+    translate([ x, -y,    0]) m3_hex_bolt(l);
+    translate([ 0,  y, -1.5]) m3_hex_bolt(l);
+    translate([ 0, -y, -1.5]) m3_hex_bolt(l);
+    translate([-x,  y,    0]) m3_hex_bolt(l);
+    translate([-x, -y,    0]) m3_hex_bolt(l);    
 }
 
 module prism(l, w, h) {
-       polyhedron(
-           points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,w,h], [l,w,h]],
+       translate([-l/2, 0, 0])
+    polyhedron(
+           points=[[0,0,0], [l,0,0], [l,w,0], [0,w,0], [0,0,h], [l,0,h]],
            faces=[[0,1,2,3],[5,4,3,2],[0,4,5,1],[0,3,4],[5,2,1]]
        );
 }
 
 
-module gusset(x, y, height, r, gusset_w) {
-    translate([x, y, 0]) rotate([0,0,r]) prism(gusset_w, height, height);
+module gusset(height, gusset_w, angle) {
+    rotate([0,0,angle]) translate([0, gusset_w, 0]) prism(gusset_w, height, height);
 }
 
 module standoff(x, y, height, radius, gusset_w, fn) {
-    gusset_l = height;
-    translate([x, y, 0]) cylinder(h=height, r = radius, $fn=fn);
-    if (x>0) {
-        gusset(x-gusset_l-(radius/2), y+(gusset_w/2), height, -90, gusset_w);
-    } else {
-        gusset(x+gusset_l+(radius/2), y-(gusset_w/2), height, 90, gusset_w);
-    }
-    if (x==0) {
-        // x is corre4ct for centre post gussets
-        gusset(x-gusset_l-(radius/2), y+(gusset_w/2), height, -90, gusset_w);
-    } else if (y>0) {
-        gusset(x-(gusset_w/2), y-gusset_l-(radius/2), height, 0, gusset_w);
-    } else {
-        gusset(x+(gusset_w/2), y+gusset_l+(radius/2), height, 180, gusset_w);
-    }
+    hypot = pythag(2*x, 2*y);
+    angle = asin((2*x)/(hypot));
 
+    translate([x, y, 0]) {
+        cylinder(h = height, r = radius, $fn=fn);
+        if (x>0) {
+            gusset(height, gusset_w, 90);
+            if (y>0) {
+                gusset(height, gusset_w, 180);
+                gusset(height, gusset_w, 180-angle);
+            } else {
+                gusset(height, gusset_w, 0);
+                gusset(height, gusset_w, angle);
+            }
+        } else if (x<0) {
+            gusset(height, gusset_w, 270);
+            if (y>0) {
+                gusset(height, gusset_w, 180);
+                gusset(height, gusset_w, 180-angle);
+            } else {
+                gusset(height, gusset_w, 0);
+                gusset(height, gusset_w, angle);
+            }
+        } else {
+            // centre post gussets
+            gusset(height, gusset_w, 90);
+            gusset(height, gusset_w, 270);
+        }   
+    }
 }
 
 module standoffs(x,y,height, radius, gusset_w, fn) {
-    translate([0, 0, 0]) {
-        standoff( x,  y,height, radius, gusset_w, fn);
-        standoff( x, -y,height, radius, gusset_w, fn);
-        standoff( 0,  y,height, radius, gusset_w, fn);
-        standoff( 0, -y,height, radius, gusset_w, fn);
-        standoff(-x,  y,height, radius, gusset_w, fn);
-        standoff(-x, -y,height, radius, gusset_w, fn);
-    }
+    standoff( x,  y,height, radius, gusset_w, fn);
+    standoff( x, -y,height, radius, gusset_w, fn);
+    standoff( 0,  y,height, radius, gusset_w, fn);
+    standoff( 0, -y,height, radius, gusset_w, fn);
+    standoff(-x,  y,height, radius, gusset_w, fn);
+    standoff(-x, -y,height, radius, gusset_w, fn);
 }
 
 module standoff_spacers(x,y,height, radius, fn) {
@@ -186,6 +205,32 @@ module face(h) {
         }
 }
 
+function pythag(x,y) = sqrt((x*x) + (y*y));
+
+module cross_brace(x,y,r,w,h) {
+    hypot = pythag(2*x, 2*y);
+    angle = acos((2*x)/(hypot));
+    translate([0,0,h/2]) rotate([0,0,angle]) cube([hypot, 2*r, h], center=true);
+    translate([0,0,h/2]) rotate([0,0,-angle]) cube([hypot, 2*r, h], center=true);
+    translate([0,0,h+h/2]) rotate([0,0,angle]) cube([hypot, w, h], center=true);
+    translate([0,0,h+h/2]) rotate([0,0,-angle]) cube([hypot, w, h], center=true);
+}
+
+module round_corner(ox,oy,bx,by, corner_h, corner_r) {
+    difference() {
+    translate([ox,oy,(corner_h/2)]) cube([corner_r*2, corner_r*2,corner_h+0.2], center=true);
+    translate([bx,by,(corner_h/2)]) cylinder(h=corner_h+0.2, r=corner_r, center=true,$fn=36);
+        
+    }
+}
+
+module round_corners(ox,oy,bx,by, corner_h, corner_r) {
+    round_corner(ox,oy,bx,by, corner_h, corner_r);
+    round_corner(-ox,oy,-bx,by, corner_h, corner_r);
+    round_corner(ox,-oy,bx,-by, corner_h, corner_r);
+    round_corner(-ox,-oy,-bx,-by, corner_h, corner_r);
+}
+
 module front() {
     difference() {
         union() {
@@ -199,41 +244,58 @@ module front() {
             }
         }
         // bolt holes
-        bolt_pattern(bolt_x, bolt_y);
+        bolt_pattern(bolt_x, bolt_y, bolt_l);
+        round_corners((apature_w + apature_o2)/2,
+                      (apature_h + apature_o2)/2,
+                      bolt_x,
+                      bolt_y,
+                      face_d+screen_d,
+                      standoff_r);  
    }
 }
 
+
+
 module back() {
     difference() {
+        back_h = face_d * 2;
         union() {
-            face(face_d * 2);
-            translate([0,0,face_d*2]) {
+            face(back_h);
+            cross_brace(bolt_x, bolt_y, standoff_r, face_d, back_h);
+            translate([0, 0, back_h]) {
                 // outer
                 ribs(((apature_w + (apature_o2-face_d))/2),
                      ((apature_h + (apature_o2-face_d))/2),
                      face_d,
-                     face_d * 2);
+                     back_h);
                 // center
                 ribs(bolt_x,
                      bolt_y,
                      face_d,
-                     face_d * 2);
+                     back_h);
                 // inner
-                ribs(((screen_w - face_o2+ face_d)/2),
-                     ((screen_h - face_o2+ face_d)/2),
+                ribs(((screen_w - face_o2 + face_d)/2),
+                     ((screen_h - face_o2 + face_d)/2),
                      face_d,
-                     face_d * 2);
-            }
-            standoffs(bolt_x,
+                     back_h);
+            
+                standoffs(bolt_x,
                       bolt_y,
-                      apature_d - (face_d + screen_d),
+                      apature_d - (back_h + face_d + screen_d),
                       standoff_r,
                       face_d,
                       36);
+                  }
         }    
         // bolt holes
         translate([ 0,0,-(face_d+screen_d)])
-            bolt_pattern(bolt_x, bolt_y);      
+            bolt_pattern(bolt_x, bolt_y,bolt_l);
+        round_corners((apature_w + apature_o2)/2,
+                      (apature_h + apature_o2)/2,
+                      bolt_x,
+                      bolt_y,
+                      back_h*2,
+                      standoff_r);      
    }
 }
 
@@ -279,7 +341,7 @@ module mounting() {
    
         // bolt holes
         translate([ 0,0,-apature_d])
-            bolt_pattern(bolt_x, bolt_y);
+            bolt_pattern(bolt_x, bolt_y, bolt_l);
         translate([ 0,0,-apature_d])
             mounting_studs((mount_w/2), (mount_h/2), 16);
         // clip to bed width
