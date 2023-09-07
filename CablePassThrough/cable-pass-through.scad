@@ -2,7 +2,7 @@
 //
 // Copyright Vincent Sanders 2023 <vince@kyllikki.org>
 // Attribution 4.0 International (CC BY 4.0)
-// Version 1.0
+// Version 1.1
 
 use <threads.scad>
 
@@ -20,7 +20,9 @@ pt_lip_size=5; //[2:20]
 pt_parts = "all"; //[all,inner-outer,inner,outer,cap]
 
 // cap style
-pt_cap_style = "solid"; //[solid,ring,half,small]
+pt_cap_style = "ring-text"; //[solid,solid-text,ring,ring-text,half,small]
+//cap text
+pt_cap_text = "Parametric pass through. VRS (2023)  ";
 
 module __Customizer_Limit__ () {}
 
@@ -50,22 +52,7 @@ core_radius = ((pt_inner-thread_width)/2)-pt_wall;
 
 echo(pt_diameter=pt_diameter,thread_width=thread_width,pt_outer=pt_outer,pt_inner=pt_inner,core_diameter=(core_radius*2));
 
-module sector(h, d, a1, a2) {
-    if (a2 - a1 > 180) {
-        difference() {
-            cylinder(h=h, d=d);
-            translate([0,0,-0.5]) sector(h+1, d+1, a2-360, a1);
-        }
-    } else {
-        difference() {
-            cylinder(h=h, d=d);
-            rotate([0,0,a1]) translate([-d/2, -d/2, -0.5])
-                cube([d, d/2, h+1]);
-            rotate([0,0,a2]) translate([-d/2, 0, -0.5])
-                cube([d, d/2, h+1]);
-        }
-    }
-}
+
 
 module flange(depth, diameter, hole_diameter) {
     translate([0, 0, -pt_flange_depth]) {
@@ -117,11 +104,51 @@ module inner() {
     }
 }
 
+function circle_text_radius(radius,chars) = radius - ((2 * PI * radius)/len(chars));
+
+module circle_text(radius, depth, chars) {
+    lenchars = len(chars);
+    font_size = (2 * PI * radius) / lenchars;
+    step_angle = 360 / lenchars;
+
+    for (char = [0 : lenchars - 1])
+        rotate(a=[0, 180, char * step_angle])
+            translate([0, radius + font_size / 2, -depth])
+                linear_extrude(depth)
+                    text(
+                        chars[char],
+                        font = "Liberation Mono; Style = Bold",
+                        size = font_size,
+                        valign = "center",
+                        halign = "center"
+                    );
+}
+
+// sector of a cylinder
+module sector(h, d, a1, a2) {
+    if (a2 - a1 > 180) {
+        difference() {
+            cylinder(h=h, d=d);
+            translate([0,0,-0.5]) sector(h+1, d+1, a2-360, a1);
+        }
+    } else {
+        difference() {
+            cylinder(h=h, d=d);
+            rotate([0,0,a1])
+                translate([-d/2, -d/2, -0.5])
+                    cube([d, d/2, h+1]);
+            rotate([0,0,a2])
+                translate([-d/2, 0, -0.5])
+                    cube([d, d/2, h+1]);
+        }
+    }
+}
+
 module cap(depth, hole_diameter, clip_count, clip_len, style) {
     ang = 360/clip_count;
     circ = 2 * PI * (hole_diameter/2);
     clip_angle = ((clip_len/circ) * 360)/2;//half the clip arc angle
-    cap_z = depth + 0.2 // additional cap height gives a small line
+    cap_z = depth + 0.2; // additional cap height gives a small line
 
     // construct cap with face style
     difference() {
@@ -152,6 +179,22 @@ module cap(depth, hole_diameter, clip_count, clip_len, style) {
                          r2=(hole_diameter/4)-depth,
                          center=false,
                          $fn=30*24);
+        else if (style=="ring-text") {
+            hole_radius = circle_text_radius((hole_diameter - depth)/2, pt_cap_text);
+            translate([0, 0, -depth - 0.1])
+                union() {
+                    circle_text(hole_radius, depth/2, pt_cap_text);
+                    cylinder(h=cap_z + 0.3,
+                         r1=hole_radius-(depth/2),
+                         r2=hole_radius-(depth/2)-depth,
+                         center=false,
+                         $fn=30*24);
+                }
+        } else if (style=="solid-text") {
+            hole_radius = circle_text_radius((hole_diameter - depth)/2, pt_cap_text);
+            translate([0, 0, -depth - 0.1])
+                    circle_text(hole_radius, depth/2, pt_cap_text);
+        }
     }
 
     // construct clips
