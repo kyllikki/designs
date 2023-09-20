@@ -14,25 +14,28 @@ cable_diameter = 4;// [2:10]
 bearing_code = 608;// [625,608,609,6000,6002,6004,6902]
 
 // axel bolt size (nominal diameter) (bearing - use bearing bore)
-axle_size = "bearing"; // [bearing,5,8,10,12,20]
+axle_size = "bearing"; // [bearing,5,8,10,12,16,20]
 
 // whether the wheels in the block have side guards 
 block_guards = true;
 
+// whether the supports have a cable guide 
+support_cable_guide = true;
+
 /* [first block] */
 
 // first plate first support bolt size (nominal diameter) (axle - use axle size)
-support_1_1_size = "axle"; // [axle,5,8,10,12,20]
+support_1_1_size = "axle"; // [axle,5,8,10,12,16,20]
 
 // first plate second support bolt size (nominal diameter) (none - no support) (same - use first support size) 
-support_1_2_size = "same"; // [none,same,5,8,10,12,20]
+support_1_2_size = "same"; // [none,same,5,8,10,12,16,20]
 
 /* [second block] */
 // second plate first support bolt size (nominal diameter) (none - no second block) (axle - use axle size)
-support_2_1_size = "axle"; // [none,axle,5,8,10,12,20]
+support_2_1_size = "axle"; // [none,axle,5,8,10,12,16,20]
 
 // second plate second support bolt size (nominal diameter) (none - no support) (same - use first support size) 
-support_2_2_size = "none"; // [none,same,5,8,10,12,20]
+support_2_2_size = "none"; // [none,same,5,8,10,12,16,20]
 
 module __Customizer_Limit__ () {}
 
@@ -40,6 +43,7 @@ wheel_clearance = 0.6;// clerance between wheel and block
 wheel_additional_diameter = 4; // material between the bearing and the base of the cable groove
 plate_thickness = 2.2;// thickness of plate walls
 block_guard_size = 2;
+use_clearance_sizes = true; // if boltholes should use clearence sizes
 
 // openscad detail settings
 $fs = 0.1; // minimum fragment size
@@ -54,9 +58,11 @@ function NameToNumber(name) = [for (x = name_count_map) if (x[0] == name) x[1]][
 bearing_data = [
     [608,  [8,  12.5,  19.2, 22,  7]],
     [609,  [9, 14.45,  21.2, 24,  7]],
-    [625,  [5,  8.4,  13.22, 16,  5]],
+    [625,  [5,   8.4, 13.22, 16,  5]],
     [6000, [10, 14.8,  22.6, 26,  8]], 
+    [6001, [12,   17, 24.72, 28,  8]], 
     [6002, [15, 20.5,  28.2, 32,  9]], 
+    [6003, [17,   23,  31.2, 35,  10]], 
     [6004, [20, 27.2, 37.19, 42, 12]],
     [6902, [15,   17,    26, 28,  7]]
 ];
@@ -68,16 +74,19 @@ m5_bolt_lengths=[22,25,30,35,40,45,50,55,60,65];
 m8_bolt_lengths=[22,25,30,35,40,45,50,55,60,65,70,75,80];
 m10_bolt_lengths=[25,30,35,40,50,60,70,80,90,100];
 m12_bolt_lengths=[25,30,35,40,50,55,60,65,70,75,80, 85,90,100,110];
+m16_bolt_lengths=[30,35,40,50,55,60,65,70,75,80,90,100,110];
 m20_bolt_lengths=[30,35,40,50,55,60,65,70,75,80,90,100,110];
-// bearing bore, [diameter, [lengths], nut flats, nut height]
+// bearing bore, [diameter, [lengths], nut flats, nut height, (close)clearence diameter]
 bolt_data = [
-[5,  [ 5, m5_bolt_lengths, 8, 5]],
-[8,  [ 8, m8_bolt_lengths, 13, 8]],
-[9,  [ 8, m8_bolt_lengths, 13, 8]],
-[10, [10, m10_bolt_lengths, 17, 10]],// DIN
-[12, [12, m12_bolt_lengths, 19, 12]], // DIN
-[15, [12, m12_bolt_lengths, 19, 12]],// DIN
-[20, [20, m20_bolt_lengths, 30, 20]],
+[5,  [ 5,  m5_bolt_lengths,  8,  5,  5.3]],
+[8,  [ 8,  m8_bolt_lengths, 13,  8,  8.4]],
+[9,  [ 8,  m8_bolt_lengths, 13,  8,  8.4]],
+[10, [10, m10_bolt_lengths, 17, 10, 10.5]],// DIN
+[12, [12, m12_bolt_lengths, 19, 12,  13]], // DIN
+[15, [12, m12_bolt_lengths, 19, 12,  13]],// DIN
+[16, [16, m16_bolt_lengths, 24, 16,  17]],// DIN
+[17, [16, m16_bolt_lengths, 24, 16,  17]],// DIN
+[20, [20, m20_bolt_lengths, 30, 20,  21]],
 ];
 function BoltData(bore) = _table_search(bolt_data, bore, 5);
 
@@ -174,50 +183,80 @@ function calc_wheel_radius(bearing, cable_diameter) =
      calc_wheel_guide_diameter(bearing, cable_diameter)
     ) / 2 + cable_diameter;
 
+// compute the center support
+//bolt_flat_radius = bolt[2]/2;
+//bolt_radius = bolt[0]/2;
+function supportcenter(wheel_radius, bolt) = 
+    let(cable_guide_size = (support_cable_guide ? (cable_diameter +1 ) - (bolt[2]/2 - bolt[0]/2 - 1):0),
+    center = wheel_radius + wheel_clearance + bolt[2]/2 + cable_guide_size) center;
+
 // create plate and support on one side of the axle
-module support(wheel_radius, wheel_height, bolt, bolt_length, outer) {
+module support(wheel_radius, wheel_height, bearing,bolt, bolt_length, outer) {
     bolt_flat_radius = bolt[2]/2;
     bolt_radius = bolt[0]/2;
-    center = wheel_radius + wheel_clearance + bolt_flat_radius;
+    cable_guide_size = (support_cable_guide ? (cable_diameter +1) - (bolt_flat_radius-bolt_radius-1):0);
+    center = supportcenter(wheel_radius, bolt);
     boss_height = wheel_height/2 + wheel_clearance;
     guard_radius = (block_guards? block_guard_size: 0);
-    
-    difference() {
-        union() {
-            // tangent polygon            
-            translate([0,0,outer ? 0 : boss_height])
-                tangent_join(wheel_radius + wheel_clearance+guard_radius,
+    //cable_guide_radius = (bearing[1] + (bearing[2] - bearing[1])/3)/2;
+    cable_guide_radius = max((bearing[1])/2, bolt_flat_radius+2);
+    cable_guide_center=center + cable_guide_radius - cable_diameter/2 - bolt_radius - 1;
+  
+    // tangent polygon            
+    translate([0,0,outer ? 0 : boss_height])
+                tangent_join(wheel_radius + wheel_clearance + guard_radius,
                              bolt_flat_radius,
                              center,
                              plate_thickness);
-            // tip of the plate
-            translate([center,0,0]) {
+ 
+    difference() {
+        // boss at tip of the plate around bolt
+        union()  {
+            translate([center,0,0])
                 cylinder(h=(outer ? 0 : boss_height) + plate_thickness + boss_height,
-                         r=bolt_flat_radius,
-                         center=false);
+                     r=bolt_flat_radius,
+                     center=false);
+            if (support_cable_guide) {
+                intersection() {
+                    translate([cable_guide_center,0,0]) 
+                        cylinder(h=(outer ? 0 : boss_height) + plate_thickness + boss_height,
+                                 r=cable_guide_radius+cable_diameter/2+1,
+                                 center=false);
+                    
+                    tangent_join(wheel_radius + wheel_clearance + guard_radius,
+                                 bolt_flat_radius,
+                                 center,
+                                 plate_thickness +2*boss_height);
+                }
             }
         }
-        translate([center,0,-0.01]) cylinder(h=bolt_length,r=bolt_radius,center=false);
+        if (support_cable_guide) {
+            translate([cable_guide_center,0,(outer ? 0 : boss_height)+plate_thickness + boss_height])
+                torus(cable_guide_radius, cable_diameter/2);
+            if (!outer) translate([cable_guide_center,0,0])
+                torus(cable_guide_radius, cable_diameter/2);
+        }
     }
+    
 }
 
 // guard sides
-module block_guards(radius, height) {
-    cut_angle=45;
+module block_guards(radius, height,cut_angle=45) {
     difference() {
         cylinder(h=height, r=radius, center=false);
-        union() {
-            cylinder(h=height + 0.01, r=radius - block_guard_size, center=false);
-            rotate([0,0,-(cut_angle/2)]) cube([radius, radius,height+0.01], center=false);
-            rotate([0,0,90+(cut_angle/2)]) cube([radius, radius,height+0.01], center=false);
-            rotate([0,0,-90+(cut_angle/2)]) cube([radius, radius,height+0.01], center=false);
-            rotate([0,0,180-(cut_angle/2)]) cube([radius, radius,height+0.01], center=false);
-        }
+        translate([0, 0, -0.01]) 
+            union() {
+                cylinder(h=height + 0.02, r=radius - block_guard_size, center=false);
+                rotate([0, 0,-(cut_angle/2)]) cube([radius, radius,height+0.02], center=false);
+                rotate([0, 0,90+(cut_angle/2)]) cube([radius, radius,height+0.02], center=false);
+                rotate([0, 0,-90+(cut_angle/2)]) cube([radius, radius,height+0.02], center=false);
+                rotate([0, 0,180-(cut_angle/2)]) cube([radius, radius,height+0.02], center=false);
+            }
     }
 }
 
 // plate center and bearing abutments
-module center(wheel_radius, wheel_height, bearing, bolt,support1,support2,bolt_length,outer) {
+module center(wheel_radius, wheel_height, bearing, bolt, support1, support2, bolt_length, outer) {
     bearing_bore = bearing[0];
     bearing_shoulder = bearing[1];
     bearing_width = bearing[4];
@@ -230,54 +269,49 @@ module center(wheel_radius, wheel_height, bearing, bolt,support1,support2,bolt_l
     boss_height = wheel_height/2 + wheel_clearance;
     guard_radius = (block_guards? block_guard_size: 0);
 
-    difference() {
-        translate([0,0,outer ? 0 : boss_height]) {
-            //%translate([0,0,plate_thickness+wheel_clearance]) wheel(bearing, cable_diameter);
-            // center disc
-                difference() {
-                    cylinder(h=plate_thickness, r=wheel_radius + wheel_clearance + guard_radius, center=false);
-                    union() {
-                        // center disc can interfere with support bolts
-                        translate([wheel_radius + wheel_clearance +(support1[2]/2),0,-0.01]) 
-                            cylinder(h=bolt_length,r=support1[0]/2,center=false);
-                        if (!is_undef(support2))
-                            translate([-wheel_radius - wheel_clearance -(support2[2]/2),0,-0.01]) 
-                                cylinder(h=bolt_length,r=support2[0]/2,center=false);
-                    }
-                }
+    translate([0,0,outer ? 0 : boss_height]) {
+        //%translate([0,0,plate_thickness+wheel_clearance]) wheel(bearing, cable_diameter);
 
-                // block guards
-                if (block_guards)
-                    block_guards(wheel_radius + wheel_clearance + guard_radius, plate_thickness + boss_height);
+        // center disc
+        cylinder(h=plate_thickness, r=wheel_radius + wheel_clearance + guard_radius, center=false);
+                    
+        // block guards
+        if (block_guards)
+            translate([0,0,outer?0:-boss_height])
+                block_guards(wheel_radius + wheel_clearance + guard_radius, 
+                             (outer?0:boss_height) + plate_thickness + boss_height,
+                             45);
 
-                // center abutment
-                translate([0,0,outer?0:-abutment_height])
-                    cylinder(h=(outer?0:abutment_height) +plate_thickness + abutment_height,
-                             r=abutment_radius,
-                             center=false);
+        // center abutment
+        translate([0,0,outer?0:-abutment_height])
+            cylinder(h=(outer?0:abutment_height) + plate_thickness + abutment_height,
+                     r=abutment_radius,
+                     center=false);
                 
-                // make bearing fit on bolt with sleeve if required
-                if (bolt_sleeve_radius > 0) 
-                    translate([0,0,outer?0:-abutment_height-bolt_sleeve_height])
-                        cylinder(h=(outer?0:bolt_sleeve_height+abutment_height)+
-                                       plate_thickness + abutment_height + bolt_sleeve_height,
-                                 r=bolt_sleeve_radius,
-                                 center=false);
-        }
-        
-        translate([0,0,-0.01]) cylinder(h=bolt_length,r=bolt_radius,center=false);
-    }
+        // make bearing fit on bolt with sleeve if required
+        if (bolt_sleeve_radius > 0) 
+            translate([0,0,outer?0:-abutment_height-bolt_sleeve_height])
+                cylinder(h=(outer?0:bolt_sleeve_height+abutment_height)+
+                             plate_thickness + abutment_height + bolt_sleeve_height,
+                         r=bolt_sleeve_radius,
+                         center=false);
+     }
 }    
 
+
 // bolt holes
-module blockboltholes() {
+module blockboltholes(wheel_radius,axle, support1, support2, bolt_length) {
+    
     //axle
-    translate([0,0,-0.01]) cylinder(h=bolt_length,r=bolt_radius,center=false);
-                         translate([wheel_radius + wheel_clearance +(support1[2]/2),0,-0.01]) 
-                            cylinder(h=bolt_length,r=support1[0]/2,center=false);
-                        if (!is_undef(support2))
-                            translate([-wheel_radius - wheel_clearance -(support2[2]/2),0,-0.01]) 
-                                cylinder(h=bolt_length,r=support2[0]/2,center=false);   
+    translate([0, 0, -0.01])
+        cylinder(h=bolt_length, r=(use_clearance_sizes ? axle[4]:axle[0]) / 2, center=false);
+    //support 1
+    translate([supportcenter(wheel_radius, support1), 0, -0.01]) 
+        cylinder(h=bolt_length, r=(use_clearance_sizes ? support1[4]:support1[0]) / 2, center=false);
+    //support 2
+    if (!is_undef(support2))
+        translate([-supportcenter(wheel_radius, support2), 0, -0.01]) 
+            cylinder(h=bolt_length, r=(use_clearance_sizes ? support2[4]:support2[0]) / 2, center=false);   
 }
 
 // outer side of block
@@ -290,14 +324,14 @@ module blockouter(bearing, axle, support1, support2, cable_diameter, wheel_radiu
             center(wheel_radius, wheel_height, bearing, axle, support1,support2,bolt_length, outer);
 
             // first support
-            support(wheel_radius, wheel_height, support1, bolt_length, outer);
+            support(wheel_radius, wheel_height, bearing,support1, bolt_length, outer);
 
             // second support
             if (!is_undef(support2))
                 rotate([0,0,180])
-                    support(wheel_radius, wheel_height, support2, bolt_length, outer);
+                    support(wheel_radius, wheel_height, bearing,support2, bolt_length, outer);
         }
-        //blockboltholes();
+        blockboltholes(wheel_radius,axle, support1, support2, bolt_length);
     }
 }
 
