@@ -27,6 +27,9 @@ support_cable_guide = true;
 // if the outer support plates are thicker to allow bolt heads to be recessed into them
 recess_bolts = false;
 
+// if the bearing should be printed in place
+pip_bearing = false;
+
 /* [First block] */
 
 // first plate first support bolt size (nominal diameter) (axle - use axle size)
@@ -144,6 +147,35 @@ module bearing_placeholder(bearing) {
                 [bearing_shoulder/2,0]
             ]);
         translate([0,0,-0.1]) cylinder(h=bearing_width+0.2,r=bearing_bore/2, center=false);
+    }
+}
+
+module bearing_print(bearing) {
+    bearing_bore = bearing[0];
+    bearing_outer = bearing[3];
+    bearing_width = bearing[4];
+    gap_radius=(bearing_bore/4) + (bearing_outer/4);
+    gap_unit = bearing_width / 12;
+    gap_size=0.15;
+    difference() {
+        cylinder(h=bearing_width, r=bearing_outer/2+0.01,center=false);
+        union() {
+        //bearing bore
+        translate([0,0,-0.1]) cylinder(h=bearing_width+0.2,r=bearing_bore/2, center=false);
+        rotate_extrude(convexity = 5)
+            translate([gap_radius,0,0])
+            polygon([
+                    [gap_size, -0.1],
+                    [gap_size + 3*gap_unit, 4*gap_unit],
+                    [gap_size + 3*gap_unit, 8*gap_unit],
+                    [gap_size, 0.1+(12*gap_unit)],
+                    [-gap_size, 0.1+(12*gap_unit)],
+                    [-gap_size + 3*gap_unit, 8*gap_unit],
+                    [-gap_size + 3*gap_unit, 4*gap_unit],
+                    [-gap_size, -0.1],
+                    [gap_size, -0.1]
+                  ]);
+        }
     }
 }
 
@@ -421,18 +453,22 @@ module blockplate(bearing, shafts, cable_diameter, wheel_radius, bolt_length, ou
 
 // pulley wheel
 module wheel(bearing, groove_diameter) {
+    bearing_width = bearing[4];
+    height = calc_wheel_height(bearing, groove_diameter);
+    union() {
     difference() {
         bearing_shoulder = bearing[1];
         bearing_recess = bearing[2];
         bearing_outer = bearing[3];
-        bearing_width = bearing[4];
         bearing_gap = bearing[2] - bearing[1];// gap between bearing recess and shoulder
 
-        height = calc_wheel_height(bearing, groove_diameter);
         side_height = (height - groove_diameter) / 2;
         guide_height = calc_wheel_guide_diameter(bearing, groove_diameter);
 
         groove_radius = ((bearing_outer + wheel_additional_diameter + groove_diameter) / 2);
+
+        // radius of the bearing abutment
+        abutment_radius = (bearing_recess - bearing_gap/3)/2;
 
         union() {
             //main disc
@@ -449,7 +485,7 @@ module wheel(bearing, groove_diameter) {
                 cylinder(h=height, r=bearing_outer/2, center=false,$fn=30*24);
             // bearing bore
             translate([0,0,-0.1])
-                cylinder(h=height+0.2, r=(bearing_recess - bearing_gap/3)/2, center=false);
+                cylinder(h=height+0.2, r=(pip_bearing ? bearing_outer/2 : abutment_radius), center=false);
             // groove
             translate([0,0,height / 2])
                 rotate_extrude(convexity = 10, $fn = 100)
@@ -459,7 +495,13 @@ module wheel(bearing, groove_diameter) {
                 translate([0,-groove_diameter/2,0]) square([groove_diameter*2,groove_diameter], center=false);
             }
         }
-        translate([0,0,(height-bearing_width)/2]) %bearing_placeholder(bearing);
+    }
+
+    translate([0,0,(height - bearing_width)/2])
+        if (pip_bearing)
+            bearing_print(bearing);
+        else
+            %bearing_placeholder(bearing);
     }
 }
 
