@@ -4,6 +4,7 @@
 // Attribution 4.0 International (CC BY 4.0)
 // Version 1.1
 
+// https://github.com/rcolyer/threads-scad
 use <threads.scad>
 
 /* [Pass Through] */
@@ -52,14 +53,16 @@ core_radius = ((pt_inner-thread_width)/2)-pt_wall;
 
 echo(pt_diameter=pt_diameter,thread_width=thread_width,pt_outer=pt_outer,pt_inner=pt_inner,core_diameter=(core_radius*2));
 
-
+// openscad detail settings
+$fs = 0.1; // minimum fragment size
+$fa = 2; // minimum angle
 
 module flange(depth, diameter, hole_diameter) {
     translate([0, 0, -pt_flange_depth]) {
         difference() {
-            cylinder(h=depth, r1=(diameter/2)- depth, r2=diameter/2, $fn=30*24);
+            cylinder(h=depth, r1=(diameter/2)- depth, r2=diameter/2);
             translate([0, 0, -0.1])
-                cylinder(h=depth + 0.2, r1=(hole_diameter+depth)/2, r2=(hole_diameter/2), $fn=30*24);
+                cylinder(h=depth + 0.2, r1=(hole_diameter+depth)/2, r2=(hole_diameter/2));
         }
     }
 }
@@ -83,7 +86,7 @@ module outer() {
         flange(pt_flange_depth, flange_diameter, core_radius*2);
         ridges(ridge_count);
         ScrewHole(outer_diam=pt_inner, height=pt_depth, tooth_angle=thread_angle)
-            cylinder(h=pt_depth, r=(pt_outer/2), center=false, $fn=30*24);
+            cylinder(h=pt_depth, r=(pt_outer/2), center=false);
     }
 }
 
@@ -96,10 +99,10 @@ module inner() {
         }
         union() {
             translate([0,0,-0.1])
-                cylinder(h=pt_depth+0.2, r=core_radius,center=false, $fn=20*24);
-            cylinder(h=flange_clip_size, r1=core_radius, r2=core_radius+(flange_clip_size/2), $fn=30*24);
+                cylinder(h=pt_depth+0.2, r=core_radius,center=false);
+            cylinder(h=flange_clip_size, r1=core_radius, r2=core_radius+(flange_clip_size/2));
             translate([0,0,flange_clip_size])
-                cylinder(h=flange_clip_size,  r1=core_radius+(flange_clip_size/2),r2=core_radius, $fn=30*24);
+                cylinder(h=flange_clip_size,  r1=core_radius+(flange_clip_size/2),r2=core_radius);
         }
     }
 }
@@ -153,7 +156,7 @@ module cap(depth, hole_diameter, clip_count, clip_len, style) {
     // construct cap with face style
     difference() {
         translate([0, 0, -depth])
-            cylinder(h=cap_z, r1=(hole_diameter+depth)/2, r2=(hole_diameter/2), $fn=30*24);
+            cylinder(h=cap_z, r1=(hole_diameter+depth)/2, r2=(hole_diameter/2));
         if (style=="half")
             translate([0, 0, -depth - 0.1])
                 intersection() {
@@ -208,9 +211,9 @@ module cap(depth, hole_diameter, clip_count, clip_len, style) {
                            (step * ang)+clip_angle);
                 }
             }
-            cylinder(h=flange_clip_size, r1=core_radius, r2=core_radius+(flange_clip_size/2), $fn=30*24);
+            cylinder(h=flange_clip_size, r1=core_radius, r2=core_radius+(flange_clip_size/2));
         }
-        cylinder(h=flange_clip_size, r=core_radius-flange_clip_size,center=false, $fn=30*24);
+        cylinder(h=flange_clip_size, r=core_radius-flange_clip_size,center=false);
      }
 }
 
