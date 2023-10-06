@@ -2,47 +2,55 @@
 //
 // Copyright Vincent Sanders 2023 <vince@kyllikki.org>
 // Attribution 4.0 International (CC BY 4.0)
-// Version 1.1
+// Version 1.2
 
 /* [General] */
 
-// Number of wheels in the blocks
+// Number of sheaves in the blocks
 block_type = "single"; // [single,double,triple,quadruple,quintuple]
 
 // diameter of cable/rope being used
-cable_diameter = 4;// [2:10]
+cable_diameter = 4;// [2:12]
 
-// code for bearing in use
-bearing_code = 608;// [625,608,609,6000,6001,6002,6003,6004,6902]
-
-// axle bolt size (nominal diameter) (bearing - use bearing bore)
-axle_size = "bearing"; // [bearing,5,8,10,12,16,20]
-
-// whether the wheels in the block have side guards
-block_guards = true;
+// if the cheeks (outer face plates) are thicker to allow bolt heads to be recessed into them
+recess_bolts = false;
 
 // whether the supports have a cable guide
 support_cable_guide = true;
 
-// if the outer support plates are thicker to allow bolt heads to be recessed into them
-recess_bolts = false;
+// show assembly view instead of print plate
+show_assembly = false;
 
-// if the bearing should be printed in place
-pip_bearing = false;
 
-/* [First block] */
+/* [Sheaves] */
 
-// first plate first support bolt size (nominal diameter) (axle - use axle size)
+// code for bearing in sheaves
+bearing_code = 608;// [625,608,609,6000,6001,6002,6003,6004,6902]
+
+// if the bearing should be printed
+printed_bearing = false;
+
+// axle bolt size (nominal diameter) (bearing - use bearing bore)
+axle_size = "bearing"; // [bearing,5,8,10,12,16,20]
+
+// whether the sheaves in the block have side guards
+has_sheave_guards = false;
+
+/* [Standing block] */
+
+// Standing block crown load bolt size (nominal diameter) (axle - use axle size)
 support_1_1_size = "axle"; // [axle,5,8,10,12,16,20]
 
-// first plate second support bolt size (nominal diameter) (none - no support) (same - use first support size)
+// Standing block tail load bolt size (nominal diameter) (none - no support) (same - use first support size)
 support_1_2_size = "same"; // [none,same,5,8,10,12,16,20]
 
-/* [Second block] */
-// second plate first support bolt size (nominal diameter) (none - no second block) (axle - use axle size)
+
+/* [Running block] */
+
+// Running block crown load bolt size (nominal diameter) (none - no second block) (axle - use axle size)
 support_2_1_size = "axle"; // [none,axle,5,8,10,12,16,20]
 
-// second plate second support bolt size (nominal diameter) (none - no support) (same - use first support size)
+// Running block tail load bolt size (nominal diameter) (none - no support) (same - use first support size)
 support_2_2_size = "none"; // [none,same,5,8,10,12,16,20]
 
 module __Customizer_Limit__ () {}
@@ -52,10 +60,13 @@ wheel_additional_diameter = 4; // material between the bearing and the base of t
 plate_thickness = 2.2;// thickness of plate walls
 block_guard_size = 2;
 bolt_clearance_idx =1;//index of bolthole clearance to use - none,close,medium,free
+printed_bearing_clearance = 0.4;//printed bearing hub clearance (for me 0.3 is solid and 0.4 is sloppy)
+rough_preview = true; // if the preview is rough
 
 // openscad detail settings
-$fs = 0.1; // minimum fragment size
-$fa = 2; // minimum angle
+
+$fs = ($preview && rough_preview)?2:0.1; // minimum fragment size
+$fa = ($preview && rough_preview)?10:2; // minimum angle
 
 // name to number map
 name_count_map = [["single",1],["double",2],["triple",3],["quadruple",4],["quintuple",5]];
@@ -152,11 +163,16 @@ module bearing_placeholder(bearing) {
 
 module bearing_print(bearing) {
     bearing_bore = bearing[0];
+    bearing_shoulder = bearing[1];
+    bearing_recess = bearing[2];
     bearing_outer = bearing[3];
     bearing_width = bearing[4];
-    gap_radius=(bearing_bore/4) + (bearing_outer/4);
+
+    // gap radius is halfway between the abutment radius and the outer bearing radius
+    gap_radius = (bearing_outer/4) + (bearing_recess/12) + (bearing_shoulder/6);
     gap_unit = bearing_width / 12;
-    gap_size=0.15;
+    gap_size = printed_bearing_clearance/2;
+
     difference() {
         cylinder(h=bearing_width, r=bearing_outer/2+0.01,center=false);
         union() {
@@ -165,15 +181,15 @@ module bearing_print(bearing) {
         rotate_extrude(convexity = 5)
             translate([gap_radius,0,0])
             polygon([
-                    [gap_size, -0.1],
-                    [gap_size + 3*gap_unit, 4*gap_unit],
-                    [gap_size + 3*gap_unit, 8*gap_unit],
-                    [gap_size, 0.1+(12*gap_unit)],
-                    [-gap_size, 0.1+(12*gap_unit)],
-                    [-gap_size + 3*gap_unit, 8*gap_unit],
-                    [-gap_size + 3*gap_unit, 4*gap_unit],
                     [-gap_size, -0.1],
-                    [gap_size, -0.1]
+                    [-gap_size - 3*gap_unit, 4*gap_unit],
+                    [-gap_size - 3*gap_unit, 8*gap_unit],
+                    [-gap_size, 0.1+(12*gap_unit)],
+                    [gap_size, 0.1+(12*gap_unit)],
+                    [gap_size - 3*gap_unit, 8*gap_unit],
+                    [gap_size - 3*gap_unit, 4*gap_unit],
+                    [gap_size, -0.1],
+                    [-gap_size, -0.1]
                   ]);
         }
     }
@@ -213,17 +229,17 @@ module tangent_join(radiusa, radiusb, length, height) {
 
 // calculate wheel height ensuring there are always guides at least 2.5mm either side of cable
 // bearing_height = bearing[4]
-function calc_wheel_height(bearing, cable_diameter) = max((bearing[4] + 2), (cable_diameter + 5));
+function calc_sheave_height(bearing, cable_diameter) = max((bearing[4] + 2), (cable_diameter + 5));
 
 // the diameter of the wheel side guides
 function calc_wheel_guide_diameter(bearing, cable_diameter) =
-    (calc_wheel_height(bearing, cable_diameter) - cable_diameter) / 2;
+    (calc_sheave_height(bearing, cable_diameter) - cable_diameter) / 2;
 
 // calculate wheel radius
 // bearing_outer = bearing[3];
 // bearing radius + extra bearing diameter + cable radius + guide side radius
 // TODO : cable radius vs cable diameter, i think the side guides are a cable radius too tall?
-function calc_wheel_radius(bearing, cable_diameter) =
+function calc_sheave_radius(bearing, cable_diameter) =
     (bearing[3] +
      wheel_additional_diameter +
      calc_wheel_guide_diameter(bearing, cable_diameter)
@@ -241,7 +257,7 @@ function calc_support_length(wheel_radius, bolt) =
 function calc_support_radius(bolt) = bolt[2]/2;
 
 // calculate center axle disc radius
-function calc_center_radius(wheel_radius) = wheel_radius + wheel_clearance + (block_guards? block_guard_size: 0);
+function calc_center_radius(wheel_radius) = wheel_radius + wheel_clearance + (has_sheave_guards? block_guard_size: 0);
 
 // support with cable guide hole
 //bearing_shoulder_diameter = bearing[1]
@@ -307,7 +323,7 @@ module support(wheel_radius, wheel_height, bearing, bolt, thickness, bolt_length
 }
 
 // guard sides
-module block_guards(radius, height,cut_angle=45) {
+module sheave_guards(radius, height,cut_angle=45) {
     difference() {
         cylinder(h=height, r=radius, center=false);
         translate([0, 0, -0.01])
@@ -326,10 +342,13 @@ module block_guards(radius, height,cut_angle=45) {
 module center(wheel_radius, wheel_height, bearing, axle, thickness, bolt_length, outer) {
     bearing_bore = bearing[0];
     bearing_shoulder = bearing[1];
+    bearing_recess = bearing[2];
     bearing_width = bearing[4];
-    bearing_gap = bearing[2] - bearing[1];// gap between bearing recess and shoulder
-    abutment_radius = (bearing_shoulder + bearing_gap/3)/2;
-    abutment_height = 1 + wheel_clearance;
+
+    // bearing shoulder abutment is 1/3rd of the space between bearing shoulder and recess
+    abutment_radius = (bearing_recess/6) + (bearing_shoulder/3);
+    abutment_height = ((wheel_height - bearing_width)/2)+wheel_clearance;
+
     bolt_sleeve_radius = (axle[0] < bearing_bore ? bearing_bore/2 : 0);
     bolt_sleeve_height= bearing_width/2;
     bolt_radius = axle[0]/2;
@@ -339,9 +358,9 @@ module center(wheel_radius, wheel_height, bearing, axle, thickness, bolt_length,
         //%translate([0,0,plate_thickness+wheel_clearance]) wheel(bearing, cable_diameter);
 
         // block guards
-        if (block_guards)
+        if (has_sheave_guards)
             translate([0,0,outer?0:-boss_height])
-                block_guards(calc_center_radius(wheel_radius),
+                sheave_guards(calc_center_radius(wheel_radius),
                              (outer?0:boss_height) + thickness + boss_height,
                              45);
 
@@ -353,15 +372,14 @@ module center(wheel_radius, wheel_height, bearing, axle, thickness, bolt_length,
 
         // make bearing fit on bolt with sleeve if required
         if (bolt_sleeve_radius > 0)
-            translate([0,0,outer?0:-abutment_height-bolt_sleeve_height])
-                cylinder(h=(outer?0:bolt_sleeve_height+abutment_height)+
-                             thickness + abutment_height + bolt_sleeve_height,
+            translate([0,0,outer?0:-boss_height])
+                cylinder(h=(outer?0:boss_height) + thickness + boss_height,
                          r=bolt_sleeve_radius,
                          center=false);
      }
 }
 
-// block support plate
+// block face plate
 // shafts = [axle, support1, support2]
 module blockplatemain(wheel_radius, wheel_height, shafts,thickness, outer) {
     center_radius = calc_center_radius(wheel_radius);
@@ -402,18 +420,18 @@ module blockboltholes(wheel_radius, shafts, bolt_length) {
             cylinder(h=bolt_length, r=(shafts[2][0] + shafts[2][5][bolt_clearance_idx]) / 2, center=false);
 }
 
-module blockboltheads(wheel_radius, shafts) {
+module blockboltheads(wheel_radius, shafts, isnut) {
     nut_height = calc_nut_height(shafts);
     //axle
     translate([0, 0, -0.01])
-        cylinder(h=nut_height, r=(shafts[0][4] + shafts[0][5][bolt_clearance_idx]) / 2, center=false);
+        cylinder(h=nut_height, r=(shafts[0][4] + shafts[0][5][bolt_clearance_idx]) / 2, center=false, $fn=isnut?6:0);
     //support 1
     translate([calc_support_length(wheel_radius, shafts[1]), 0, -0.01])
-        cylinder(h=nut_height, r=(shafts[1][4] + shafts[1][5][bolt_clearance_idx]) / 2, center=false);
+        cylinder(h=nut_height, r=(shafts[1][4] + shafts[1][5][bolt_clearance_idx]) / 2, center=false, $fn=isnut?6:0);
     //support 2
     if (!is_undef(shafts[2]))
         translate([-calc_support_length(wheel_radius, shafts[2]), 0, -0.01])
-            cylinder(h=nut_height, r=(shafts[2][4] + shafts[2][5][bolt_clearance_idx]) / 2, center=false);
+            cylinder(h=nut_height, r=(shafts[2][4] + shafts[2][5][bolt_clearance_idx]) / 2, center=false, $fn=isnut?6:0);
 }
 
 function calc_nut_height(shafts) =
@@ -426,8 +444,8 @@ function calc_plate_thickness(shafts, outer) =
     plate_thickness + (outer ? (recess_bolts ? calc_nut_height(shafts) : 0) : 0);
 
 // a plate of the block
-module blockplate(bearing, shafts, cable_diameter, wheel_radius, bolt_length, outer) {
-    wheel_height = calc_wheel_height(bearing, cable_diameter);
+module blockplate(bearing, shafts, cable_diameter, wheel_radius, bolt_length, outer, first) {
+    wheel_height = calc_sheave_height(bearing, cable_diameter);
     thickness = calc_plate_thickness(shafts, outer);
 
     difference() {
@@ -446,62 +464,64 @@ module blockplate(bearing, shafts, cable_diameter, wheel_radius, bolt_length, ou
                     support(wheel_radius, wheel_height, bearing, shafts[2],thickness, bolt_length, outer);
         }
         if (recess_bolts && outer)
-            blockboltheads(wheel_radius, shafts);
+            blockboltheads(wheel_radius, shafts, !first);
         blockboltholes(wheel_radius, shafts, bolt_length);
     }
 }
 
-// pulley wheel
-module wheel(bearing, groove_diameter) {
+// generate a sheave
+module sheave(bearing, groove_diameter) {
     bearing_width = bearing[4];
-    height = calc_wheel_height(bearing, groove_diameter);
+    height = calc_sheave_height(bearing, groove_diameter);
+
     union() {
-    difference() {
-        bearing_shoulder = bearing[1];
-        bearing_recess = bearing[2];
-        bearing_outer = bearing[3];
-        bearing_gap = bearing[2] - bearing[1];// gap between bearing recess and shoulder
+        difference() {
+            bearing_shoulder = bearing[1];
+            bearing_recess = bearing[2];
+            bearing_outer = bearing[3];
 
-        side_height = (height - groove_diameter) / 2;
-        guide_height = calc_wheel_guide_diameter(bearing, groove_diameter);
+            // radius of the recess bearing abutment
+            abutment_radius = (bearing_recess/3) + (bearing_shoulder/6);
 
-        groove_radius = ((bearing_outer + wheel_additional_diameter + groove_diameter) / 2);
+            side_height = (height - groove_diameter) / 2;
+            guide_height = calc_wheel_guide_diameter(bearing, groove_diameter);
 
-        // radius of the bearing abutment
-        abutment_radius = (bearing_recess - bearing_gap/3)/2;
+            groove_radius = ((bearing_outer + wheel_additional_diameter + groove_diameter) / 2);
 
-        union() {
-            //main disc
-            cylinder(h=height, r=groove_radius + (groove_diameter / 2), center=false);
-            //grove sides
-            translate([0, 0, side_height / 2])
-                torus(groove_radius + groove_diameter / 2, side_height / 2);
-            translate([0, 0, height - (side_height / 2)])
-                torus(groove_radius + groove_diameter / 2, side_height / 2);
-        }
-        union() {
-            // bearing space
-            translate([0,0,(height - bearing_width)/2])
-                cylinder(h=height, r=bearing_outer/2, center=false,$fn=30*24);
-            // bearing bore
-            translate([0,0,-0.1])
-                cylinder(h=height+0.2, r=(pip_bearing ? bearing_outer/2 : abutment_radius), center=false);
-            // groove
-            translate([0,0,height / 2])
-                rotate_extrude(convexity = 10, $fn = 100)
-                translate([groove_radius, 0, 0])
-                union() {
-                circle(r = groove_diameter / 2, $fn = 100);
-                translate([0,-groove_diameter/2,0]) square([groove_diameter*2,groove_diameter], center=false);
+            union() {
+                //main disc
+                cylinder(h=height, r=groove_radius + (groove_diameter / 2), center=false);
+                //groove sides
+                translate([0, 0, side_height / 2])
+                    torus(groove_radius + groove_diameter / 2, side_height / 2);
+                translate([0, 0, height - (side_height / 2)])
+                    torus(groove_radius + groove_diameter / 2, side_height / 2);
+            }
+            union() {
+                // bearing space
+                translate([0,0,(height - bearing_width)/2])
+                    cylinder(h=height, r=bearing_outer/2, center=false,$fn=30*24);
+                // bearing bore
+                translate([0,0,-0.1])
+                    cylinder(h=height+0.2, r=(printed_bearing ? bearing_outer/2 : abutment_radius), center=false);
+                // groove
+                translate([0,0,height / 2])
+                    rotate_extrude(convexity = 10, $fn = 100)
+                        translate([groove_radius, 0, 0])
+                            union() {
+                                circle(r = groove_diameter / 2, $fn = 100);
+                                translate([0,-groove_diameter/2,0])
+                                    square([groove_diameter*2,groove_diameter], center=false);
+                            }
             }
         }
-    }
 
-    translate([0,0,(height - bearing_width)/2])
-        if (pip_bearing)
-            bearing_print(bearing);
-        else
-            %bearing_placeholder(bearing);
+        // bearing
+        translate([0,0,(height - bearing_width)/2])
+            if (printed_bearing)
+                bearing_print(bearing);
+            else
+                %bearing_placeholder(bearing);
     }
 }
 
@@ -521,14 +541,14 @@ function calc_shafts(bearing) =
                        (support_2_2_size == "same" ? support3 :
                            BoltData(toInt(support_2_2_size))))
     )
-    [axle, support1, support2,support3,support4];
+    [axle, support1, support2, support3, support4];
 
 // compute a real bolt length from those available
 function calc_bolt_length(bolt, bearing, cable_diameter,pulley_count) =
     _select_bolt_len(bolt[3] +
                          plate_thickness +
                          (pulley_count *
-                             (calc_wheel_height(bearing, cable_diameter) +
+                             (calc_sheave_height(bearing, cable_diameter) +
                                  wheel_clearance +
                                  wheel_clearance +
                                  plate_thickness)),
@@ -542,33 +562,90 @@ module plate(bearing, pulley_count) {
     shafts = calc_shafts(bearing);
     echo(len(shafts), shafts=shafts);
 
-    wheel_radius = calc_wheel_radius(bearing, cable_diameter);
-    echo(wheel_radius =wheel_radius);
+    sheave_radius = calc_sheave_radius(bearing, cable_diameter);
+    echo(sheave_radius = sheave_radius);
 
     axle_length = calc_bolt_length(shafts[0], bearing, cable_diameter, pulley_count);
     echo(axle_length = axle_length);
 
-    // pulley wheels for both blocks
-    total_pulley_count = (is_undef(shafts[3]) ? pulley_count: 2*pulley_count);
-    for (i=[1:total_pulley_count])
-        translate([(i-(is_undef(shafts[3]) ? 1:2)) * (wheel_radius + 4) * 2, 0 ,0])
-            wheel(bearing, cable_diameter);
+    // sheaves for both blocks
+    total_pulley_count = (is_undef(shafts[3]) ? pulley_count: 2 * pulley_count);
+    for (i=[1 : total_pulley_count])
+        translate([(i-(is_undef(shafts[3]) ? 1:2)) * (sheave_radius + 4) * 2, 0 ,0])
+            sheave(bearing, cable_diameter);
 
     // block sides
     for (blk=[0:(is_undef(shafts[3]) ? 0:1)]) {
         mult = (blk==0?-1:1);
         for (i=[0:pulley_count]) {
-            translate([(i * (wheel_radius + 4) * 2) - wheel_radius, mult * wheel_radius * 3, 0])
+            translate([(i * (sheave_radius + 4) * 2) - sheave_radius, mult * sheave_radius * 3, 0])
                 rotate([0,0,90*mult*-1])
                     blockplate(bearing,
                                [shafts[0], shafts[(blk*2)+1], shafts[(blk*2)+2]],
                                cable_diameter,
-                               wheel_radius,
+                               sheave_radius,
                                axle_length,
-                               ((i == 0)||(i==pulley_count))
-                              );
+                               ((i == 0)||(i==pulley_count)),
+                               (i == 0));
         }
     }
 }
 
-plate(BearingData(bearing_code), NameToNumber(block_type));
+function calc_plate_heights(shafts, sheave_height, pulley_count) =
+    [for(i=[0:pulley_count])
+        calc_plate_thickness(shafts, ((i == 0)||(i==pulley_count))) +
+            (((sheave_height/2) + wheel_clearance) * (((i == 0)||(i==pulley_count))? 1:2)) ];
+
+module assembly_block(bearing, shafts, sheave_radius, pulley_count) {
+    sheave_height = calc_sheave_height(bearing, cable_diameter);
+
+    axle_length = calc_bolt_length(shafts[0], bearing, cable_diameter, pulley_count);
+
+    plate_heights = calc_plate_heights(shafts, sheave_height, pulley_count);
+
+    cumsum2 = [ 0,
+                for (a=0, b=plate_heights[0];
+                     a < len(plate_heights);
+                     a = a + 1, b = b + (plate_heights[a] == undef ? 0 : plate_heights[a]))
+                b];
+
+    for (i=[0:pulley_count])
+        translate([(i==pulley_count)?cumsum2[i]+plate_heights[0]:cumsum2[i],0,0])
+            rotate([0,(i==pulley_count)?90:90, (i==pulley_count)?180:0])
+                union() {
+                    blockplate(bearing,
+                               shafts,
+                               cable_diameter,
+                               sheave_radius,
+                               axle_length,
+                               ((i == 0)||(i==pulley_count)),
+                               (i == 0));
+                    if (i < pulley_count)
+                        translate([0, 0, plate_heights[i] - (sheave_height / 2)])
+                        sheave(bearing, cable_diameter);
+                }
+
+    %rotate([0,90,0])  union() {
+        translate([0,0,-calc_nut_height(shafts)]) blockboltheads(sheave_radius, shafts);
+        blockboltholes(sheave_radius, shafts, calc_bolt_length(shafts[0], bearing, cable_diameter, pulley_count));
+    }
+}
+
+module assembly(bearing, pulley_count) {
+    shafts = calc_shafts(bearing);
+
+    sheave_radius = calc_sheave_radius(bearing, cable_diameter);
+
+    // standing block
+    translate([0,0,sheave_radius*2.5])
+        assembly_block(bearing, [shafts[0], shafts[1], shafts[2]], sheave_radius, pulley_count);
+    // running block
+    if (!is_undef(shafts[3]))
+        translate([0,0,-sheave_radius*2.5])
+            assembly_block(bearing, [shafts[0], shafts[3], shafts[4]], sheave_radius, pulley_count);
+}
+
+if (show_assembly)
+    assembly(BearingData(bearing_code), NameToNumber(block_type));
+else
+    plate(BearingData(bearing_code), NameToNumber(block_type));
