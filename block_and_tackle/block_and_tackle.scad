@@ -36,22 +36,23 @@ axle_size = "bearing"; // [bearing,5,8,10,12,16,20]
 // whether the sheaves in the block have side guards
 has_sheave_guards = false;
 
+
 /* [Standing block] */
 
 // Standing block crown load bolt size (nominal diameter) (axle - use axle size)
-support_1_1_size = "axle"; // [axle,5,8,10,12,16,20]
+standing_crown_bolt = "axle"; // [axle,5,8,10,12,16,20]
 
-// Standing block tail load bolt size (nominal diameter) (none - no support) (same - use first support size)
-support_1_2_size = "same"; // [none,same,5,8,10,12,16,20]
+// Standing block tail load bolt size (nominal diameter) (none - no tail) (same - use crown size)
+standing_tail_bolt = "same"; // [none,same,5,8,10,12,16,20]
 
 
 /* [Running block] */
 
 // Running block crown load bolt size (nominal diameter) (none - no second block) (axle - use axle size)
-support_2_1_size = "axle"; // [none,axle,5,8,10,12,16,20]
+running_crown_bolt = "axle"; // [none,axle,5,8,10,12,16,20]
 
-// Running block tail load bolt size (nominal diameter) (none - no support) (same - use first support size)
-support_2_2_size = "none"; // [none,same,5,8,10,12,16,20]
+// Running block tail load bolt size (nominal diameter) (none - no tail) (same - use crown size)
+running_tail_bolt = "none"; // [none,same,5,8,10,12,16,20]
 
 module __Customizer_Limit__ () {}
 
@@ -65,8 +66,8 @@ rough_preview = true; // if the preview is rough
 
 // openscad detail settings
 
-$fs = ($preview && rough_preview)?2:0.1; // minimum fragment size
-$fa = ($preview && rough_preview)?10:2; // minimum angle
+$fs = ($preview && rough_preview)?1.4:0.1; // minimum fragment size
+$fa = ($preview && rough_preview)?5:2; // minimum angle
 
 // name to number map
 name_count_map = [["single",1],["double",2],["triple",3],["quadruple",4],["quintuple",5]];
@@ -390,7 +391,8 @@ module blockplatemain(wheel_radius, wheel_height, shafts,thickness, outer) {
         // center disc
         cylinder(h=thickness, r=center_radius, center=false);
         // tangent section1
-        tangent_join(center_radius,
+        if (!is_undef(shafts[1]))
+            tangent_join(center_radius,
                      calc_support_radius(shafts[1]),
                      calc_support_length(wheel_radius, shafts[1]),
                      thickness);
@@ -412,7 +414,8 @@ module blockboltholes(wheel_radius, shafts, bolt_length) {
     translate([0, 0, -0.01])
         cylinder(h=bolt_length, r=(shafts[0][0] + shafts[0][5][bolt_clearance_idx]) / 2, center=false);
     //support 1
-    translate([calc_support_length(wheel_radius, shafts[1]), 0, -0.01])
+    if (!is_undef(shafts[1]))
+        translate([calc_support_length(wheel_radius, shafts[1]), 0, -0.01])
         cylinder(h=bolt_length, r=(shafts[1][0] + shafts[1][5][bolt_clearance_idx]) / 2, center=false);
     //support 2
     if (!is_undef(shafts[2]))
@@ -426,7 +429,8 @@ module blockboltheads(wheel_radius, shafts, isnut) {
     translate([0, 0, -0.01])
         cylinder(h=nut_height, r=(shafts[0][4] + shafts[0][5][bolt_clearance_idx]) / 2, center=false, $fn=isnut?6:0);
     //support 1
-    translate([calc_support_length(wheel_radius, shafts[1]), 0, -0.01])
+    if (!is_undef(shafts[1]))
+        translate([calc_support_length(wheel_radius, shafts[1]), 0, -0.01])
         cylinder(h=nut_height, r=(shafts[1][4] + shafts[1][5][bolt_clearance_idx]) / 2, center=false, $fn=isnut?6:0);
     //support 2
     if (!is_undef(shafts[2]))
@@ -436,7 +440,7 @@ module blockboltheads(wheel_radius, shafts, isnut) {
 
 function calc_nut_height(shafts) =
     max(shafts[0][3],
-        shafts[1][3],
+        (is_undef(shafts[1]) ? 0 : shafts[1][3]),
         (is_undef(shafts[2]) ? 0 : shafts[2][3]));
 
 // calculate the required plate thickness from shaft bolt head sizes and whether this is an outer plate
@@ -456,7 +460,8 @@ module blockplate(bearing, shafts, cable_diameter, wheel_radius, bolt_length, ou
             center(wheel_radius, wheel_height, bearing, shafts[0],thickness, bolt_length, outer);
 
             // first support
-            support(wheel_radius, wheel_height, bearing, shafts[1],thickness, bolt_length, outer);
+            if (!is_undef(shafts[1]))
+                support(wheel_radius, wheel_height, bearing, shafts[1],thickness, bolt_length, outer);
 
             // second support
             if (!is_undef(shafts[2]))
@@ -531,17 +536,17 @@ function toInt(s, ret=0, i=0) = i >= len(s) ? ret: toInt(s, ret*10 + ord(s[i]) -
 // generate a list if shaft sizes based on configuration
 function calc_shafts(bearing) =
     let(axle = MappedBoltData(axle_size == "bearing" ? bearing[0]:min(bearing[0],toInt(axle_size))),
-        support1 = (support_1_1_size == "axle" ? axle : BoltData(toInt(support_1_1_size))),
-        support2 = (support_1_2_size == "none" ? undef :
-                       (support_1_2_size == "same" ? support1 :
-                           BoltData(toInt(support_1_2_size)))),
-        support3 = (support_2_1_size == "none" ? undef :
-                       (support_2_1_size == "axle" ? axle : BoltData(toInt(support_2_1_size)))),
-        support4 = (support_2_2_size == "none" ? undef :
-                       (support_2_2_size == "same" ? support3 :
-                           BoltData(toInt(support_2_2_size))))
+        support1 = (standing_crown_bolt == "axle" ? axle : BoltData(toInt(standing_crown_bolt))),
+        support2 = (standing_tail_bolt == "none" ? undef :
+                       (standing_tail_bolt == "same" ? support1 :
+                           BoltData(toInt(standing_tail_bolt)))),
+        support3 = (running_crown_bolt == "none" ? undef :
+                       (running_crown_bolt == "axle" ? axle : BoltData(toInt(running_crown_bolt)))),
+        support4 = (running_tail_bolt == "none" ? undef :
+                       (running_tail_bolt == "same" ? support3 :
+                           BoltData(toInt(running_tail_bolt))))
     )
-    [axle, support1, support2, support3, support4];
+    [axle, support2, support1, support3, support4];
 
 // compute a real bolt length from those available
 function calc_bolt_length(bolt, bearing, cable_diameter,pulley_count) =
